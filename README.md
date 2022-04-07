@@ -1,2 +1,2 @@
-# TIW-project-2022
+# TIW-Project-2022
 Project for the course "Tecnologie Informatiche per il Web" @ PoliMI
