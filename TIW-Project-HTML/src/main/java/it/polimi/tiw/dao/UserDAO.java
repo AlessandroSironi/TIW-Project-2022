@@ -42,7 +42,10 @@ public class UserDAO {
 						KeySpec spec = new PBEKeySpec(pwd.toCharArray(), salt, 65536, 128);
 						//The third parameter (65536) is effectively the strength parameter.
 						//It indicates how many iterations that this algorithm run for, increasing the time it takes to produce the hash.
-						SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+						//SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+						SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+						//Password-based-Key-Derivative-Function
+						//512 bits, 128 bytes.
 						
 						byte[] hash = factory.generateSecret(spec).getEncoded();
 						pwd_hash = hash.toString();

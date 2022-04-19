@@ -1,20 +1,19 @@
 package it.polimi.tiw.filters;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebFilter("/Login")
 public class AuthenticatedCheck implements Filter {
-
     public AuthenticatedCheck() {
         super();
     }
-
-    public void destroy() {
-    }
-
+	
+	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 

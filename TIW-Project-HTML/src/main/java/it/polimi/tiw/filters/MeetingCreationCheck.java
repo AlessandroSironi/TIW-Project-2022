@@ -16,7 +16,7 @@ public class MeetingCreationCheck implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse)resp;
         HttpSession session = request.getSession();
-        if(session.isNew() || session.getAttribute("user")==null || session.getAttribute("meetingToCreate")==null) {
+        if(session.isNew() || session.getAttribute("user") == null || session.getAttribute("meetingToCreate")==null) {
             response.sendRedirect("/home");
             return;
         }
