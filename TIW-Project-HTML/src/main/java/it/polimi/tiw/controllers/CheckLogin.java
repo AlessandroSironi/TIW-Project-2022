@@ -24,7 +24,7 @@ import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 
-@WebServlet ("CheckLogin")
+@WebServlet ("/CheckLogin")
 public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -41,10 +41,10 @@ public class CheckLogin extends HttpServlet {
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
-		templateResolver.setSuffix(".html");		
+		templateResolver.setSuffix(".html");
 	}
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
 		String usr = null;
 		String pwd = null;
 		
