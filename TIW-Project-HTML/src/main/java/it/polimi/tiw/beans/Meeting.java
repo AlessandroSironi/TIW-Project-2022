@@ -6,12 +6,11 @@ import java.util.ArrayList;
 
 public class Meeting {
 	private int id;
-	private int id_creator;
+	private int id_Creator;
 	private String title;
 	private Date startDate;
 	private Time duration;
 	private int capacity;
-	private ArrayList<Integer> participants;
 	
 	public int getId() {
 		return id;
@@ -19,11 +18,11 @@ public class Meeting {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getId_creator() {
-		return id_creator;
+	public int getId_Creator() {
+		return id_Creator;
 	}
-	public void setId_creator(int id_creator) {
-		this.id_creator = id_creator;
+	public void setId_Creator(int id_creator) {
+		this.id_Creator = id_creator;
 	}
 	public String getTitle() {
 		return title;
@@ -49,12 +48,5 @@ public class Meeting {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	public ArrayList<Integer> getParticipants() {
-		return participants;
-	}
-	public void setParticipants(ArrayList<Integer> participants) {
-		this.participants = participants;
-	}
-	
 	
 }
