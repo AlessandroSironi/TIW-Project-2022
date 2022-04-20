@@ -7,20 +7,23 @@
 </head>
 <body>
 	<div class="container shadow-lg p-3 mb-5 bg-body rounded mx-auto align-middle">
+	
 		<h1 class="display-1 text-center">Plan2Meet</h1>
+		<h6 class="display-6 text-center">Login</h6>
+		
 		<form action="CheckLogin" method="POST">
 		  <div class="mb-3">
 		    <label class="form-label">Username</label>
-		    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+		    <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username" required>
 		  </div>
 		  <div class="mb-3">
 		    <label class="form-label">Password</label>
-		    <input type="password" class="form-control" required>
+		    <input type="password" name="password" class="form-control" placeholder="Password" required>
 		  </div>
 		   <div th:if="${session.loginError!=null}" th:text="${session.loginError}" class="ui pointing red basic label"></div>
 		  <br>
 		  <button type="submit" class="btn btn-primary">Submit</button>
-		  <a class="btn btn-secondary" href="/signup" role="button">Sign Up</a>
+		  <a class="btn btn-secondary" href="signup.html" role="button">Sign Up</a>
 		</form>
 	</div>
 	

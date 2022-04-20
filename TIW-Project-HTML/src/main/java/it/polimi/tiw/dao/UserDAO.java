@@ -26,6 +26,7 @@ public class UserDAO {
 		String query_salt = "SELECT salt FROM User WHERE user = ?";
 		
 		byte[] salt = null;
+		String saltString = null;
 		String pwd_hash = null;
 		
 		try (PreparedStatement pstatement1 = connection.prepareStatement(query_salt);) {
@@ -34,7 +35,8 @@ public class UserDAO {
 				if (!result1.isBeforeFirst()) return null; //No results, user does not exists
 				else {
 					result1.next();
-					salt = result1.getBytes("salt");
+					saltString = result1.getString("salt");
+					salt = saltString.getBytes();
 					
 					try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 						pstatement.setString(1, usr);
@@ -75,7 +77,9 @@ public class UserDAO {
 	public void registerUser (String mail, String user, String password, String name, String surname) throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
 		SecureRandom random = new SecureRandom();
 		byte[] salt = new byte[16];
+		String saltString = null;
 		random.nextBytes(salt);
+		saltString = salt.toString();
 		
 		String psw_hashed = null;
 		
@@ -84,14 +88,14 @@ public class UserDAO {
 		
 		byte[] hash = factory.generateSecret(spec).getEncoded();
 		psw_hashed = hash.toString();
-		
+				
 		String query = "INSERT INTO User (mail, user, psw_hash, psw_salt, name, surname) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		 try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			 pstatement.setString(1, mail);
 			 pstatement.setString(2, user);
 			 pstatement.setString(3, psw_hashed);
-			 pstatement.setBytes(4, salt);
+			 pstatement.setString(4, saltString);
 			 pstatement.setString(5, name);
 			 pstatement.setString(6, surname);
              
@@ -118,4 +122,17 @@ public class UserDAO {
              return users;
          }
      }
+	
+	public boolean checkUserExists(String username) throws SQLException {
+		String query = "SELECT * FROM User WHERE user = ?";
+		 try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+			 pstatement.setString(1, username);
+			 try (ResultSet resultSet = pstatement.executeQuery()) {
+				 if (resultSet.next()) return true; //User already exists.
+			 } catch (SQLException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		return false;
+	}
 }

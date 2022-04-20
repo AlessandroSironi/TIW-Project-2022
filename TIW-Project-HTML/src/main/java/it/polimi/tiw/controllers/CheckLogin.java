@@ -44,7 +44,7 @@ public class CheckLogin extends HttpServlet {
 		templateResolver.setSuffix(".html");
 	}
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String usr = null;
 		String pwd = null;
 		
