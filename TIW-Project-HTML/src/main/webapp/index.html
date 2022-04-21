@@ -20,14 +20,14 @@
 		    <label class="form-label">Password</label>
 		    <input type="password" name="password" class="form-control" placeholder="Password" required>
 		  </div>
-		   <div th:if="${session.loginError!=null}" th:text="${session.loginError}" class="ui pointing red basic label"></div>
 		  <br>
 		  <button type="submit" class="btn btn-primary">Submit</button>
 		  <a class="btn btn-secondary" href="signup.html" role="button">Sign Up</a>
 		</form>
+		<p th:text=" ${loginErrorMsg}" th:classappend="${loginErrorMsg} ? alert alert-danger :  "></p>
 	</div>
-	
-	<a href="ConnectionTester">Connection DB Tester</a>
+			
+	<p class="text-center"><a href="ConnectionTester">Connection DB Tester</a></p>
 
 </body>
 </html>

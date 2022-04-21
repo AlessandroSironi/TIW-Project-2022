@@ -49,8 +49,8 @@ public class CheckLogin extends HttpServlet {
 		String pwd = null;
 		
 		try {
-			usr = StringEscapeUtils.escapeJava(request.getParameter("username"));
-			pwd = StringEscapeUtils.escapeJava(request.getParameter("password"));
+			usr = request.getParameter("username");
+			pwd = request.getParameter("password");
 			
 			if (usr == null || pwd == null || usr.isEmpty() || pwd.isEmpty())
 					throw new Exception ("Error: missing or empty credential value");
@@ -67,10 +67,10 @@ public class CheckLogin extends HttpServlet {
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to check credentials");
 			return;
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//		} catch (InvalidKeySpecException e) {
+//			e.printStackTrace();
 		}
 		
 		// If user exists, add info to the session and go to Main Page. 
@@ -81,7 +81,7 @@ public class CheckLogin extends HttpServlet {
 		if (user == null) {
 			ServletContext servletContext = getServletContext();
 			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("errorMsg", "Incorrect username or password");
+			ctx.setVariable("loginErrorMsg", "Incorrect username or password");
 			path = "/index.html";
 			templateEngine.process(path,  ctx, response.getWriter());
 		} else {

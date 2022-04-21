@@ -21,54 +21,20 @@ public class UserDAO {
 		this.connection = connection;
 	}
 	
-	public User checkCredentials (String usr, String pwd) throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
-		String query = "SELECT ID, mail, user, name, surname FROM User WHERE user = ? AND psw_hash = ?";
-		String query_salt = "SELECT salt FROM User WHERE user = ?";
-		
-		byte[] salt = null;
-		String saltString = null;
-		String pwd_hash = null;
-		
-		try (PreparedStatement pstatement1 = connection.prepareStatement(query_salt);) {
-			pstatement1.setString(1, usr);
-			try (ResultSet result1 = pstatement1.executeQuery();) {
-				if (!result1.isBeforeFirst()) return null; //No results, user does not exists
+	public User checkCredentials(String usrn, String pwd) throws SQLException {
+		String query = "SELECT  ID, user FROM User  WHERE user = ? AND psw =?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, usrn);
+			pstatement.setString(2, pwd);
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) // no results, credential check failed
+					return null;
 				else {
-					result1.next();
-					saltString = result1.getString("salt");
-					salt = saltString.getBytes();
-					
-					try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-						pstatement.setString(1, usr);
-						
-						KeySpec spec = new PBEKeySpec(pwd.toCharArray(), salt, 65536, 128);
-						//The third parameter (65536) is effectively the strength parameter.
-						//It indicates how many iterations that this algorithm run for, increasing the time it takes to produce the hash.
-						//SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-						SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-						//Password-based-Key-Derivative-Function
-						//512 bits, 128 bytes.
-						
-						byte[] hash = factory.generateSecret(spec).getEncoded();
-						pwd_hash = hash.toString();
-						
-						pstatement.setString(1, usr);
-						pstatement.setString(2, pwd_hash);
-						
-						try (ResultSet result = pstatement.executeQuery();) {
-							if (!result.isBeforeFirst()) return null; //No results, wrong login data
-							else {
-								result.next();
-								User user = new User();
-								user.setID(result.getInt("ID"));
-								user.setUsername(result.getString("user"));
-								user.setMail(result.getString("mail"));
-								user.setName(result.getString("name"));
-								user.setSurname(result.getString("surname"));
-								return user;
-							}
-						}
-					}
+					result.next();
+					User user = new User();
+					user.setID(result.getInt("ID"));
+					user.setUsername(result.getString("user"));
+					return user;
 				}
 			}
 		}
