@@ -13,7 +13,7 @@ public class AuthenticatedCheck implements Filter {
         super();
     }
 	
-	@Override
+	/*@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
@@ -28,7 +28,24 @@ public class AuthenticatedCheck implements Filter {
         // pass the request along the filter chain
         chain.doFilter(request, response);
     }
+*/
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 
+		System.out.print("Login checker filter executing ...\n");
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		String loginpath = req.getServletContext().getContextPath() + "/index.html";
+
+		HttpSession s = req.getSession();
+		if (s.isNew() || s.getAttribute("user") == null) {
+			res.sendRedirect(loginpath);
+			return;
+		}
+		// pass the request along the filter chain
+		chain.doFilter(request, response);
+	}
 
     public void init(FilterConfig fConfig) throws ServletException {
     }
