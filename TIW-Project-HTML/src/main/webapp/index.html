@@ -24,7 +24,8 @@
 		  <button type="submit" class="btn btn-primary">Submit</button>
 		  <a class="btn btn-secondary" href="signup.html" role="button">Sign Up</a>
 		</form>
-		<p th:text=" ${loginErrorMsg}" th:classappend="${loginErrorMsg} ? alert alert-danger :  "></p>
+<!-- 		<p th:text=" ${loginErrorMsg}" th:classappend="${loginErrorMsg} ? alert alert-danger :  "></p> -->
+			<p th:text=" ${loginErrorMsg}"></p>
 	</div>
 			
 	<p class="text-center"><a href="ConnectionTester">Connection DB Tester</a></p>

@@ -48,6 +48,15 @@ public class SignUp extends HttpServlet {
 		name = request.getParameter("name");
 		surname = request.getParameter("surname");
 		
+		System.out.println("user -> " + user);
+		System.out.println("password -> " + password);
+		System.out.println("mail -> " + mail);
+		System.out.println("name -> " + name);
+		System.out.println("surname -> " + surname);
+		
+		//TODO: check mail if input correctly.
+		//TODO: check if password password1 is the same.
+		
 		try {
 			if (user == null || user.isEmpty() || password == null || password.isEmpty() || mail == null || mail.isEmpty() || name == null || name.isEmpty()) {
 				throw new Exception ("Missing or empty parameters");
@@ -56,11 +65,11 @@ public class SignUp extends HttpServlet {
 				try {
 					UserDAO userDAO = new UserDAO (ConnectionHandler.getConnection(getServletContext()));
 					if (userDAO.checkUserExists(user)) {
-						session.setAttribute("signupError", "User already registered");
+						session.setAttribute("signUpErrorMsg", "User already registered");
 						templateEngine.process("signup.html", webContext, response.getWriter());
 					} else {
 						userDAO.registerUser(mail, user, password, name, surname);
-						session.removeAttribute("signupError");
+						session.removeAttribute("signUpErrorMsg");
 						response.sendRedirect("/index.html");
 					}
 				} catch (SQLException e) {
@@ -72,7 +81,7 @@ public class SignUp extends HttpServlet {
 				}
 			}
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to check credentials");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to complete the Sign Up");
 			return;
 		}
 	}

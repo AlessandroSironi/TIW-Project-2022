@@ -7,7 +7,7 @@ version="4.0">
   <display-name>TIW-Project-HTML</display-name>
   <context-param>
     <param-name>dbUrl</param-name>
-    <param-value>jdbc:mysql://localhost:3306/TIW-Project-Test?serverTimezone=UTC</param-value>
+    <param-value>jdbc:mysql://localhost:3306/TIW-Project?serverTimezone=UTC</param-value>
   </context-param>
   <context-param>
     <param-name>dbUser</param-name>
@@ -25,10 +25,10 @@ version="4.0">
   	<filter-name>AuthenticatedCheck</filter-name>
   	<filter-class>it.polimi.tiw.filters.AuthenticatedCheck</filter-class>
   </filter>
-  <filter-mapping>
+  <!--<filter-mapping>
   	<filter-name>AuthenticatedCheck</filter-name>
   	<url-pattern>/SignUp</url-pattern>
-  </filter-mapping>
+  </filter-mapping>-->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
