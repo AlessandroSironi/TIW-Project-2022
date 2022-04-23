@@ -25,10 +25,14 @@ version="4.0">
   	<filter-name>AuthenticatedCheck</filter-name>
   	<filter-class>it.polimi.tiw.filters.AuthenticatedCheck</filter-class>
   </filter>
-  <!--<filter-mapping>
+  <filter-mapping>
   	<filter-name>AuthenticatedCheck</filter-name>
   	<url-pattern>/SignUp</url-pattern>
-  </filter-mapping>-->
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>AuthenticatedCheck</filter-name>
+  	<url-pattern>/Home</url-pattern>
+  </filter-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

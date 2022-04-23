@@ -1,12 +1,12 @@
 package it.polimi.tiw.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 
 import it.polimi.tiw.beans.Meeting;
 
@@ -31,19 +31,17 @@ public class MeetingDAO {
 	
 	public ArrayList<Meeting> findMeetingsByOwner (int ID_Owner) throws SQLException {
 		ArrayList<Meeting> meetings = new ArrayList<>();
-		String query = "SELECT title, startDate, duration, capacity FROM Meeting WHERE ID_Creator = ? AND (startDate > ? OR (startDate = ? AND duration >= ?)";
+		String query = "SELECT ID, ID_Creator, title, startDate, duration, capacity FROM Meeting WHERE ID_Creator = ? AND startDate > ?";
 		
-		Date date = new Date();
-        java.sql.Date date1 = new java.sql.Date(date.getTime());
+		Date date = new Date(System.currentTimeMillis());
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Owner);
-			pstatement.setDate(2, date1);
-			pstatement.setDate(3, date1);
-			pstatement.setTime(4, new Time(System.currentTimeMillis()));
-			 try (ResultSet resultSet = pstatement.executeQuery()) {
-	                while (resultSet.next()) {
-	                	Meeting meet = new Meeting();
+			pstatement.setDate(2, date);
+			
+			try (ResultSet resultSet = pstatement.executeQuery()) {
+	               while (resultSet.next()) {
+	            	   Meeting meet = new Meeting();
 	                	meet.setId(resultSet.getInt("ID"));
 	                	meet.setId_Creator(resultSet.getInt("ID_Creator"));
 	                	meet.setTitle(resultSet.getString("title"));
@@ -57,6 +55,5 @@ public class MeetingDAO {
 		}
 		return meetings;
 	}
-	
 	
 }

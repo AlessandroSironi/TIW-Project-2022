@@ -1,12 +1,11 @@
 package it.polimi.tiw.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 
 import it.polimi.tiw.beans.Meeting;
 
@@ -28,17 +27,14 @@ private Connection connection;
 	}
 	
 	public ArrayList<Meeting> findMeetingsByInvitation (int IDUser) throws SQLException {
-		Date date = new Date();
-        java.sql.Date date1 = new java.sql.Date(date.getTime());
+		Date date = new Date(System.currentTimeMillis());
 		
 		ArrayList<Meeting> meetings = new ArrayList<>();
-		String query = "SELECT M.IDMeeting, M.IDCreator, M.title, M.startDate, M.duration, M.capacity FROM Invitation AS I JOIN Meeting AS M ON I.IDMeeting = M.ID WHERE IDUser = ? AND (M.startDate > ? OR (M.startDate = ? AND M.duration >= ?)";
+		String query = "SELECT M.ID, M.ID_Creator, M.title, M.startDate, M.duration, M.capacity FROM Invitation AS I JOIN Meeting AS M ON I.IDMeeting = M.ID WHERE IDUser = ? AND M.startDate > ?";
 		
 		try(PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, IDUser);
-			pstatement.setDate(2, date1);
-			pstatement.setDate(3, date1);
-			pstatement.setTime(4, new Time(System.currentTimeMillis()));
+			pstatement.setDate(2, date);
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (result.next()) {
 					Meeting meet = new Meeting();

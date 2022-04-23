@@ -67,10 +67,6 @@ public class CheckLogin extends HttpServlet {
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to check credentials");
 			return;
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		} catch (InvalidKeySpecException e) {
-//			e.printStackTrace();
 		}
 		
 		// If user exists, add info to the session and go to Main Page. 
@@ -86,7 +82,7 @@ public class CheckLogin extends HttpServlet {
 			templateEngine.process(path,  ctx, response.getWriter());
 		} else {
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/home";
+			path = getServletContext().getContextPath() + "/Home";
 			response.sendRedirect(path);
 		}
 	}
