@@ -22,8 +22,6 @@
 	
 	<h1 class="display-1 text-center">Plan2Meet</h1>
 	<h6 class="display-6 text-center">Meetings Manager</h6>
-	
-	<p th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></p>
 </div>
 
 <div class="container">
@@ -91,12 +89,12 @@
 				    	<input type="date" name="date" class="form-control" placeholder="Date" required>
 				  	</div>
 				  	<div class="mb-3">
-				    	<label class="form-label">Duration</label>
-				    	<input type="time" name="time" class="form-control" placeholder="Duration" required>
+				    	<label class="form-label">Duration (minutes)</label>
+				    	<input type="number" name="duration" class="form-control" placeholder="Duration" required>
 				  	</div>
 				  	<div class="mb-3">
 				    	<label class="form-label">Capacity</label>
-				    	<input type="number" name="capacity" class="form-control" placeholder="Capacity" required>
+				    	<input type="number" name="capacity" class="form-control" placeholder="Capacity" min="1" required>
 				  	</div>
 				  	<button type="submit" class="btn btn-primary">Submit</button>
 				  </form>

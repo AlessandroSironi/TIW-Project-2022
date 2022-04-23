@@ -17,7 +17,7 @@ CREATE TABLE Meeting (
     ID_Creator INT NOT NULL,
     title VARCHAR(100) NOT NULL,
     startDate DATE NOT NULL,
-    duration TIME NOT NULL,
+    duration INT NOT NULL,
     capacity INT NOT NULL
 );
 

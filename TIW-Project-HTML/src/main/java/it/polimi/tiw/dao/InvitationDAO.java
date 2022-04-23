@@ -42,7 +42,7 @@ private Connection connection;
 					meet.setId_Creator(result.getInt("IDCreator"));
 					meet.setTitle(result.getString("title"));
 					meet.setStartDate(result.getDate("startDate"));
-					meet.setDuration(result.getTime("duration"));
+					meet.setDuration(result.getInt("duration"));
 					meet.setCapacity(result.getInt("capacity"));
 					
 					meetings.add(meet);

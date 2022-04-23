@@ -9,7 +9,7 @@ public class Meeting {
 	private int id_Creator;
 	private String title;
 	private Date startDate;
-	private Time duration;
+	private int duration;
 	private int capacity;
 	
 	public int getId() {
@@ -36,10 +36,10 @@ public class Meeting {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public Time getDuration() {
+	public int getDuration() {
 		return duration;
 	}
-	public void setDuration(Time duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 	public int getCapacity() {

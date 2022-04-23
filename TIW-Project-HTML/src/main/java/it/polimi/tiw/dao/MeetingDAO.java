@@ -46,7 +46,7 @@ public class MeetingDAO {
 	                	meet.setId_Creator(resultSet.getInt("ID_Creator"));
 	                	meet.setTitle(resultSet.getString("title"));
 	                	meet.setStartDate(resultSet.getDate("startDate"));
-	                	meet.setDuration(resultSet.getTime("duration"));
+	                	meet.setDuration(resultSet.getInt("duration"));
 	                	meet.setCapacity(resultSet.getInt("capacity"));
 	                	
 	                	meetings.add(meet);
