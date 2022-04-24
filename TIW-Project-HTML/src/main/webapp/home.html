@@ -15,11 +15,10 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <span class="navbar-text" th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></span>
   </div>
-  <button class="btn btn-outline-success my-2 my-sm-0" th:href="@{/Logout}" type="button">Logout</button>
+  <a class="btn btn-outline-success my-2 my-sm-0" th:href="@{/Logout}">Logout</a>
 </nav>
 
 <div class="container">
-	
 	<h1 class="display-1 text-center">Plan2Meet</h1>
 	<h6 class="display-6 text-center">Meetings Manager</h6>
 </div>
@@ -86,11 +85,11 @@
 				  	</div>
 				  	<div class="mb-3">
 				    	<label class="form-label">Date</label>
-				    	<input type="date" name="date" class="form-control" placeholder="Date" required>
+				    	<input type="datetime-local" name="date" class="form-control" placeholder="Date" required>
 				  	</div>
 				  	<div class="mb-3">
 				    	<label class="form-label">Duration (minutes)</label>
-				    	<input type="number" name="duration" class="form-control" placeholder="Duration" required>
+				    	<input type="number" name="duration" class="form-control" placeholder="Duration" min="1" required>
 				  	</div>
 				  	<div class="mb-3">
 				    	<label class="form-label">Capacity</label>

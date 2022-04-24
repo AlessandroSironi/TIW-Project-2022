@@ -27,10 +27,6 @@ version="4.0">
   </filter>
   <filter-mapping>
   	<filter-name>AuthenticatedCheck</filter-name>
-  	<url-pattern>/SignUp</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-  	<filter-name>AuthenticatedCheck</filter-name>
   	<url-pattern>/Home</url-pattern>
   </filter-mapping>
   <welcome-file-list>

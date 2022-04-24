@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<title>Registry</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-light bg-light" style="margin-left:30px; margin-right:30px;">
+  <a class="navbar-brand" th:href="@{/Home}">Plan2Meet</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <span class="navbar-text" th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></span>
+  </div>
+  <a class="btn btn-outline-success my-2 my-sm-0" th:href="@{/Logout}">Logout</a>
+</nav>
+
+<div class="container">
+	<h1 class="display-1 text-center">Plan2Meet</h1>
+	<h6 class="display-6 text-center">Registered Users</h6>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <h6 class="display-6">Meeting Data</h6>
+      <p th:text="${'Title: ' + param.title}"></p>
+      <p th:text="${'Date: ' + param.date}"></p>
+      <p th:text="${'Duration: ' + param.duration}"></p>
+      <p th:text="${'Capacity: ' + param.capacity}"></p>
+      <br><br>
+      <p th:text="${'Please choose up to ' + param.capacity + ' users.'}">
+      <p th:text=" ${capacityErrorMsg}"></p>
+      <br>
+      <form action="CheckInvitations" method="POST">
+      	<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col"></th>
+					<th scope="col">Name</th>
+					<th scope="col">Surname</th>
+					<th scope="col">Mail</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<td>
+						 <input class="form-check-input" type="checkbox" th:value="${user.ID}" id="flexCheckDefault">
+					</td>
+					<td th:text="${user.name}" scope="row">Name</td>
+					<td th:text="${user.surname}" scope="row">Surname</td>
+					<td th:text="${user.mail}" scope="row">Mail</td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="hidden" name="title" th:value="${param.title}">
+		<input type="hidden" name="date" th:value="${param.date}">
+		<input type="hidden" name="duration" th:value="${param.duration}">
+		<input type="hidden" name="capacity" th:value="${param.capacity}">
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

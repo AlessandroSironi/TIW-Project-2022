@@ -30,12 +30,10 @@ public class UserDAO {
 		//SecureRandom random = new SecureRandom();
 		byte[] salt = new byte[16];
 		//random.nextBytes(salt);
-		
-		System.out.println("Sono in checkCredentials e non ho eseguito query1.");
+
 		try (PreparedStatement pstatement1 = connection.prepareStatement(query1);) {
 			pstatement1.setString(1, usrn);
 			try (ResultSet result1 = pstatement1.executeQuery();) {
-				System.out.println("Sono in checkCredentials/executeQuery_pstatement1.");
 				if (!result1.isBeforeFirst()) {
 					System.out.println("User doesn't exists.");
 					return null;
@@ -85,10 +83,6 @@ public class UserDAO {
 		byte[] salt = new byte[16];
 		random.nextBytes(salt);
 		
-		System.out.println("Sono in registerUser.");
-		
-		//String psw_hashed = null;
-		
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 		
@@ -105,20 +99,22 @@ public class UserDAO {
 			 pstatement.setString(6, surname);
              
 			 pstatement.executeUpdate();
-		 }
+			 
+			 System.out.println("Registered user: " + user);		 }
 	} 
 	
 	public ArrayList<User> getOtherUsers (int iduser) throws SQLException {
 		String query = "SELECT ID, mail, user, name, surname FROM User WHERE ID != ?";
 		ArrayList<User> users = new ArrayList<>();
 		
-		 try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+		 try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			 pstatement.setInt(1, iduser);
              try (ResultSet resultSet = pstatement.executeQuery()) {
                  while (resultSet.next()) {
                      User retrievedUser = new User();
-                     retrievedUser.setID(resultSet.getInt("iduser"));
-                     retrievedUser.setMail(resultSet.getString("email"));
+                     retrievedUser.setID(resultSet.getInt("ID"));
+                     retrievedUser.setUsername(resultSet.getString("user"));
+                     retrievedUser.setMail(resultSet.getString("mail"));
                      retrievedUser.setName(resultSet.getString("name"));
                      retrievedUser.setSurname(resultSet.getString("surname"));
                      users.add(retrievedUser);
@@ -129,7 +125,6 @@ public class UserDAO {
      }
 	
 	public boolean checkUserExists(String username) throws SQLException {
-		System.out.println("Sono in checkUserExists");
 		String query = "SELECT * FROM User WHERE user = ?";
 		 try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			 pstatement.setString(1, username);
