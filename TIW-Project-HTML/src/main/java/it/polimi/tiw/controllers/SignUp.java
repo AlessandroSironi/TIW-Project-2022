@@ -8,6 +8,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,15 +25,17 @@ import java.util.regex.Pattern;
 @WebServlet("/SignUp")
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	TemplateEngine templateEngine;
+	private TemplateEngine templateEngine;
+	private Connection connection = null;
 	
 	@Override
-	public void init() {
+	public void init() throws ServletException {
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(getServletContext());
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
+        connection = ConnectionHandler.getConnection(getServletContext());
 	}
 	
 	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -68,7 +72,7 @@ public class SignUp extends HttpServlet {
 		        if (mat.matches()) { //Check if mail address is in the correct form.
 					if (password.equals(passwordRepeat)) { //Check if password and passwordRepeat match.
 						try {
-							UserDAO userDAO = new UserDAO (ConnectionHandler.getConnection(getServletContext()));
+							UserDAO userDAO = new UserDAO (connection);
 							if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
 								webContext.setVariable("signUpErrorMsg", "Username already taken.");
 								path = "/signup.html";
@@ -102,4 +106,5 @@ public class SignUp extends HttpServlet {
 			return;
 		}
 	}
+	
 }
