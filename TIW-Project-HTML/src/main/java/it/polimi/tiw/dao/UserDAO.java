@@ -136,4 +136,17 @@ public class UserDAO {
 		 }
 		return false;
 	}
+	
+	public boolean checkUserIDExists(int ID) throws SQLException {
+		String query = "SELECT * FROM User WHERE ID = ?";
+		 try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			 pstatement.setInt(1, ID);
+			 try (ResultSet resultSet = pstatement.executeQuery()) {
+				 if (resultSet.next()) return true; //User already exists.
+			 } catch (SQLException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		return false;
+	}
 }

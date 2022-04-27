@@ -20,6 +20,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
@@ -74,7 +75,31 @@ public class CreateMeeting extends HttpServlet {
 				}
 				else {
 					String dateString = date.toString();
-					path = getServletContext().getContextPath() + "/Registry?title=" + title + "&date=" + dateString + "&duration=" + duration + "&capacity=" + capacity;
+					//path = getServletContext().getContextPath() + "/Registry?title=" + title + "&date=" + dateString + "&duration=" + duration + "&capacity=" + capacity;
+					path = getServletContext().getContextPath() + "/Registry";
+					
+					Meeting meetingToCreate = new Meeting();
+					meetingToCreate.setTitle(title);
+					meetingToCreate.setStartDate(date);
+					meetingToCreate.setDuration(duration);
+					meetingToCreate.setCapacity(capacity);
+					
+					session.setAttribute("meetingToCreate", meetingToCreate);
+					
+					/*
+					Cookie cTitle = new Cookie("title", title);
+					Cookie cDate = new Cookie("date", date.toString());
+					Cookie cDuration = new Cookie("duration", String.valueOf(duration));
+					Cookie cCapacity = new Cookie("capacity", String.valueOf(capacity));
+					
+					response.addCookie(cTitle);
+					response.addCookie(cDate);
+					response.addCookie(cDuration);
+					response.addCookie(cCapacity);
+					*/
+					
+					
+					
 					response.sendRedirect(path);
 				}
 			}
@@ -87,7 +112,7 @@ public class CreateMeeting extends HttpServlet {
 	}
 	
 	private Date getMeToday() {
-		//return new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); yesterday
+		//return new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); //Yesterday
 		return new Date(System.currentTimeMillis());
 	}
 	

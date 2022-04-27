@@ -1,7 +1,7 @@
 package it.polimi.tiw.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,13 +17,13 @@ public class MeetingDAO {
 		this.connection = connection;
 	}
 	
-	public void createMeeting(int ID_Creator, String title, Date startDate, Time duration, int capacity) throws SQLException {
+	public void createMeeting(int ID_Creator, String title, Date startDate, int duration, int capacity) throws SQLException {
 		String query = "INSERT INTO Meeting (ID_Creator, title, startDate, duration, capacity) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Creator);
 			pstatement.setString(2, title);
 			pstatement.setDate(3, new java.sql.Date(startDate.getTime()));
-			pstatement.setTime(4, duration);
+			pstatement.setInt(4, duration);
 			pstatement.setInt(5, capacity);
 			pstatement.executeUpdate();
 		}
@@ -37,7 +37,7 @@ public class MeetingDAO {
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Owner);
-			pstatement.setDate(2, date);
+			pstatement.setDate(2, new java.sql.Date(date.getTime()));
 			
 			try (ResultSet resultSet = pstatement.executeQuery()) {
 	               while (resultSet.next()) {
@@ -54,6 +54,25 @@ public class MeetingDAO {
 			 }
 		}
 		return meetings;
+	}
+	
+	public int getMeetingID (int ID_Creator, String title, Date startDate, int duration, int capacity) throws SQLException {
+		String query = "SELECT ID FROM Meeting WHERE ID_Creator = ? AND title = ? AND startDate = ? AND duration = ? AND capacity = ?";
+		int meetID = -1;
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, ID_Creator);
+			pstatement.setString(2, title);
+			pstatement.setDate(3,  new java.sql.Date(startDate.getTime()));
+			pstatement.setInt(4, duration);
+			pstatement.setInt(5, capacity);
+			
+			try (ResultSet resultSet = pstatement.executeQuery()) {
+				if (resultSet.next())
+					meetID = resultSet.getInt("ID");
+			}
+		}
+		return meetID;
 	}
 	
 }

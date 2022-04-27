@@ -6,15 +6,15 @@
 <title>Registry</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-light bg-light" style="margin-left:30px; margin-right:30px;">
-  <a class="navbar-brand" th:href="@{/Home}">Plan2Meet</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand px-2" th:href="@{/Home}">Plan2Meet</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <span class="navbar-text" th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></span>
   </div>
-  <a class="btn btn-outline-success my-2 my-sm-0" th:href="@{/Logout}">Logout</a>
+  <a class="btn btn-outline-light" th:href="@{/Logout}">Logout</a>
 </nav>
 
 <div class="container">
@@ -26,13 +26,13 @@
   <div class="row">
     <div class="col-md-8 mx-auto">
       <h6 class="display-6">Meeting Data</h6>
-      <p th:text="${'Title: ' + param.title}"></p>
-      <p th:text="${'Date: ' + param.date}"></p>
-      <p th:text="${'Duration: ' + param.duration}"></p>
-      <p th:text="${'Capacity: ' + param.capacity}"></p>
+      <p th:text="${'Title: ' + session.meetingToCreate.title}"></p>
+      <p th:text="${'Date: ' + session.meetingToCreate.startDate}"></p>
+      <p th:text="${'Duration: ' + session.meetingToCreate.duration}"></p>
+      <p th:text="${'Capacity: ' + session.meetingToCreate.capacity}"></p>
       <br><br>
-      <p th:text="${'Please choose up to ' + param.capacity + ' users.'}">
-      <p th:text=" ${capacityErrorMsg}"></p>
+      <p th:text=" ${attemptsErrorMsg}"></p>
+      <p th:text="${'Please choose up to ' + session.meetingToCreate.capacity + ' users.'}">
       <br>
       <form action="CheckInvitations" method="POST">
       	<table class="table table-striped">
@@ -47,7 +47,8 @@
 			<tbody>
 				<tr th:each="user : ${users}">
 					<td>
-						 <input class="form-check-input" type="checkbox" th:value="${user.ID}" id="flexCheckDefault">
+						 <input th:if="${invitedUsersID == null}" class="form-check-input" type="checkbox" th:value="${user.ID}" name="usersInvited" id="flexCheckDefault">
+						 <input th:if="${invitedUsersID != null}" class="form-check-input" type="checkbox" th:value="${user.ID}" name="usersInvited" th:checked="${invitedUsersID.contains(user.ID)}" id="flexCheckDefault">
 					</td>
 					<td th:text="${user.name}" scope="row">Name</td>
 					<td th:text="${user.surname}" scope="row">Surname</td>

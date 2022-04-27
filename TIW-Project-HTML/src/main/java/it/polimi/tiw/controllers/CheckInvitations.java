@@ -1,10 +1,160 @@
 package it.polimi.tiw.controllers;
 
-public class CheckInvitations {
-	//TODO: check invitations takes post values from registry.html form and 
-		//validate if tentativi <= 3
-		// -> validate if #invites <= capacity
-		// -> if not, set (in session?) attribute "tentativi" or tentativi++
-		// -> if > 3 -> pagina cancellazione con link per home
-		//If valid, meetingDAO.registerMeeting() && for (Invitation i : invitations) invitationDAO.registerInvitation()
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import it.polimi.tiw.beans.Meeting;
+import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.InvitationDAO;
+import it.polimi.tiw.dao.MeetingDAO;
+import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utils.ConnectionHandler;
+
+
+//TODO: check invitations takes post values from registry.html form and 
+	//validate if tentativi <= 3
+	// -> validate if #invites <= capacity
+	// -> if not, set (in session?) attribute "tentativi" or tentativi++
+	// -> if > 3 -> pagina cancellazione con link per home
+	//If valid, meetingDAO.registerMeeting() && for (Invitation i : invitations) invitationDAO.registerInvitation()
+
+
+@WebServlet("/CheckInvitations")
+public class CheckInvitations extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private TemplateEngine templateEngine;
+	private Connection connection = null;
+
+	public CheckInvitations() {
+		super();
+	}
+
+	public void init() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		this.templateEngine = new TemplateEngine();
+		this.templateEngine.setTemplateResolver(templateResolver);
+		templateResolver.setSuffix(".html");
+		connection = ConnectionHandler.getConnection(getServletContext());
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
+		String path = null;
+		
+		User userOwner = (User) session.getAttribute("user");
+		int userOwnerID = userOwner.getID();
+		
+		ArrayList<User> invitedUsers = new ArrayList<>();
+		ArrayList<Integer> usersID= new ArrayList<Integer>();
+		
+		UserDAO userDAO = new UserDAO(connection);
+		MeetingDAO meetingDAO = new MeetingDAO(connection);
+		InvitationDAO invitationDAO = new InvitationDAO(connection);
+		
+		Meeting meetingToCreate = (Meeting) session.getAttribute("meetingToCreate");
+		System.out.println("CheckInvitations receinved meeting with title: "+ meetingToCreate.getTitle());
+		int capacity = meetingToCreate.getCapacity();
+		
+		
+		//Check that userID values are valid
+		String[] invitedUsersStrings = null;
+		invitedUsersStrings = request.getParameterValues("usersInvited");
+
+		if (invitedUsersStrings == null) {
+			System.out.println("invitedUsersString == null");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
+			return;
+		}
+
+		for (String s : invitedUsersStrings) {
+			System.out.println("Parsing ID: "+ s);
+			Integer id = Integer.parseInt(s);		
+			try {
+				if (!userDAO.checkUserIDExists(id)) {
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			usersID.add(id);
+		}
+		
+		if (usersID.size() > capacity) {
+			if (session.getAttribute("retry") == null)
+				session.setAttribute("retry", 1);
+			else {
+				int temp = (int) session.getAttribute("retry");
+				temp = temp + 1;
+				if (temp > 3) {
+					session.removeAttribute("retry");
+					path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
+					//send error to Error Page
+				} else {
+					session.setAttribute("retry", temp);
+					session.setAttribute("invitedUsersID", usersID);
+					path = getServletContext().getContextPath() + "/GoToRegistry";
+					
+					webContext.setVariable("attemptsErrorMsg", "Too many users selected.");
+					templateEngine.process(path,  webContext, response.getWriter());
+					
+					// send error to registry with selected items.
+				}
+			}
+		} else { //# of people invited is ok!
+			try {
+				if (meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity()) != -1) {
+					path = getServletContext().getContextPath() + "/ErrorCreationMeeting"; 
+					webContext.setVariable("attemptsErrorMsg", "Meeting already exists.");
+					templateEngine.process(path,  webContext, response.getWriter());
+				} else {
+					meetingDAO.createMeeting(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
+					int meetingID = meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
+					for (int u : usersID) {
+						invitationDAO.inviteUser(meetingID, u);
+					}
+					
+					path = getServletContext().getContextPath() + "/Home";
+					response.sendRedirect(path);
+					
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the meeting.");
+			}
+		}
+		
+	}
+	
+	public void destroy() {
+		try {
+			ConnectionHandler.closeConnection(connection);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

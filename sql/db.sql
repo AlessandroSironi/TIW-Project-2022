@@ -16,7 +16,7 @@ CREATE TABLE Meeting (
     ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     ID_Creator INT NOT NULL,
     title VARCHAR(100) NOT NULL,
-    startDate DATE NOT NULL,
+    startDate DATETIME NOT NULL,
     duration INT NOT NULL,
     capacity INT NOT NULL
 );
