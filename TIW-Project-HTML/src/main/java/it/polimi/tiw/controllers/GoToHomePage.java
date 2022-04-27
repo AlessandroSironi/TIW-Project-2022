@@ -63,6 +63,7 @@ public class GoToHomePage extends HttpServlet {
 		
 		try {
 			meetingsInvited = invitationDAO.findMeetingsByInvitation(user.getID());
+			System.out.println("User " + user.getID() + " was invited to meetings: " + meetingsInvited);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Encountered an error while loading meetings to which the user was invited to.");
@@ -70,7 +71,7 @@ public class GoToHomePage extends HttpServlet {
 		}
 
 		// Redirect to the Home page and add missions to the parameters
-		String path = "/home.html";
+		String path = "/WEB-INF/home.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("meetingsCreated", meetingsCreated);

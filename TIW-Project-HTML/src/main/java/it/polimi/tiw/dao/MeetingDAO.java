@@ -33,7 +33,7 @@ public class MeetingDAO {
 	public ArrayList<Meeting> findMeetingsByOwner (int ID_Owner) throws SQLException {
 		ArrayList<Meeting> meetings = new ArrayList<>();
 		String query = "SELECT ID, ID_Creator, title, startDate, duration, capacity FROM Meeting WHERE ID_Creator = ? AND startDate > ?";
-		
+				
 		Date date = new Date(System.currentTimeMillis());
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
@@ -42,7 +42,7 @@ public class MeetingDAO {
 			
 			try (ResultSet resultSet = pstatement.executeQuery()) {
 	               while (resultSet.next()) {
-	            	   Meeting meet = new Meeting();
+	            	    Meeting meet = new Meeting();
 	                	meet.setId(resultSet.getInt("ID"));
 	                	meet.setId_Creator(resultSet.getInt("ID_Creator"));
 	                	meet.setTitle(resultSet.getString("title"));
@@ -74,6 +74,21 @@ public class MeetingDAO {
 			}
 		}
 		return meetID;
+	}
+	
+	public String getMeetingOwnerUsername (int IDMeeting) throws SQLException {
+		String query = "SELECT ID_Creator FROM Meeting WHERE ID = ?";
+		String username = null;
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, IDMeeting);
+			try (ResultSet resultSet = pstatement.executeQuery()) {
+				if (resultSet.next()) {
+					username = resultSet.getString("ID_Creator");
+				}
+			}
+		}
+		return username;
 	}
 	
 }

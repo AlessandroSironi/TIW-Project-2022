@@ -59,7 +59,7 @@ public class GoToRegistry extends HttpServlet {
 			return;
 		}
 		
-		String path = "/registry.html";
+		String path = "/WEB-INF/registry.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("users", users);

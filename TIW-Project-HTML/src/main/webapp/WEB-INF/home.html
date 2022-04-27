@@ -56,6 +56,7 @@
 							<th scope="col">Date</th>
 							<th scope="col">Duration</th>
 							<th scope="col">Capacity</th>
+							<th scope="col">Invited by</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -64,6 +65,7 @@
 							<td th:text="${meeting.startDate}" scope="row">Date</td>
 							<td th:text="${meeting.duration}" scope="row">Duration</td>
 							<td th:text="${meeting.capacity}" scope="row">Capacity</td>
+							<td th:text="${meeting.user_Creator}" scope="row">Invited by</td>
 						</tr>
 					</tbody>
 				</table>

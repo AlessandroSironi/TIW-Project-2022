@@ -149,4 +149,20 @@ public class UserDAO {
 		 }
 		return false;
 	}
+	
+	/*public String getUsernameByID(int ID) throws SQLException {
+		String query = "SELECT user FROM User WHERE ID = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			 pstatement.setInt(1, ID);
+			 try (ResultSet resultSet = pstatement.executeQuery()) {
+				 if (resultSet.next()) {
+					 String username = resultSet.getString("username");
+					 return username;
+				 }
+			 } catch (SQLException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		return null;
+	} */
 }

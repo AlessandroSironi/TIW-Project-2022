@@ -9,6 +9,7 @@ public class Meeting {
 	private Timestamp startDate;
 	private int duration;
 	private int capacity;
+	private String user_Creator;
 	
 	public int getId() {
 		return id;
@@ -45,6 +46,14 @@ public class Meeting {
 	}
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+	}
+	
+	public String getUser_Creator () {
+		return user_Creator;
+	}
+	
+	public void setUser_Creator (String user_Creator) {
+		this.user_Creator = user_Creator;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 import org.thymeleaf.TemplateEngine;
@@ -75,12 +76,14 @@ public class SignUp extends HttpServlet {
 							UserDAO userDAO = new UserDAO (connection);
 							if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
 								webContext.setVariable("signUpErrorMsg", "Username already taken.");
-								path = "/signup.html";
+								path = "/index.html";
 								templateEngine.process(path,  webContext, response.getWriter());
 							} else {
 								userDAO.registerUser(mail, user, password, name, surname);
-								path = getServletContext().getContextPath() + "/index.html";
-								response.sendRedirect(path);
+								
+								webContext.setVariable("signUpOKMsg", "User has been registered. Please login.");
+								path = "/index.html";
+								templateEngine.process(path,  webContext, response.getWriter());
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
@@ -91,12 +94,12 @@ public class SignUp extends HttpServlet {
 						}
 					} else {
 						webContext.setVariable("signUpErrorMsg", "Passwords do not match.");
-						path = "/signup.html";
+						path = "/index.html";
 						templateEngine.process(path,  webContext, response.getWriter());
 					}
 				} else {
 					webContext.setVariable("signUpErrorMsg", "Please input a valid mail address.");
-					path = "/signup.html";
+					path = "/index.html";
 					templateEngine.process(path,  webContext, response.getWriter());
 				}
 			}
