@@ -5,7 +5,7 @@ import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import it.polimi.tiw.beans.Meeting;
@@ -22,7 +22,8 @@ public class MeetingDAO {
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Creator);
 			pstatement.setString(2, title);
-			pstatement.setDate(3, new java.sql.Date(startDate.getTime()));
+			//pstatement.setObject(3, new java.sql.Timestamp(startDate.getTime()));
+			pstatement.setTimestamp(3, new java.sql.Timestamp(startDate.getTime()));
 			pstatement.setInt(4, duration);
 			pstatement.setInt(5, capacity);
 			pstatement.executeUpdate();
@@ -45,7 +46,7 @@ public class MeetingDAO {
 	                	meet.setId(resultSet.getInt("ID"));
 	                	meet.setId_Creator(resultSet.getInt("ID_Creator"));
 	                	meet.setTitle(resultSet.getString("title"));
-	                	meet.setStartDate(resultSet.getDate("startDate"));
+	                	meet.setStartDate(resultSet.getTimestamp("startDate"));
 	                	meet.setDuration(resultSet.getInt("duration"));
 	                	meet.setCapacity(resultSet.getInt("capacity"));
 	                	
@@ -63,7 +64,7 @@ public class MeetingDAO {
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Creator);
 			pstatement.setString(2, title);
-			pstatement.setDate(3,  new java.sql.Date(startDate.getTime()));
+			pstatement.setObject(3,  new java.sql.Timestamp(startDate.getTime()));
 			pstatement.setInt(4, duration);
 			pstatement.setInt(5, capacity);
 			

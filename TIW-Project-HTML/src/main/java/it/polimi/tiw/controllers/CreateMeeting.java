@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -74,13 +75,12 @@ public class CreateMeeting extends HttpServlet {
 					throw new Exception ("Error: missing values or bad input");
 				}
 				else {
-					String dateString = date.toString();
 					//path = getServletContext().getContextPath() + "/Registry?title=" + title + "&date=" + dateString + "&duration=" + duration + "&capacity=" + capacity;
 					path = getServletContext().getContextPath() + "/Registry";
 					
 					Meeting meetingToCreate = new Meeting();
 					meetingToCreate.setTitle(title);
-					meetingToCreate.setStartDate(date);
+					meetingToCreate.setStartDate(new Timestamp(date.getTime()));
 					meetingToCreate.setDuration(duration);
 					meetingToCreate.setCapacity(capacity);
 					

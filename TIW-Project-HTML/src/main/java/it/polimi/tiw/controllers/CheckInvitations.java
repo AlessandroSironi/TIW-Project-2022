@@ -130,20 +130,30 @@ public class CheckInvitations extends HttpServlet {
 					webContext.setVariable("attemptsErrorMsg", "Meeting already exists.");
 					templateEngine.process(path,  webContext, response.getWriter());
 				} else {
+					connection.setAutoCommit(false);
 					meetingDAO.createMeeting(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
 					int meetingID = meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
+					System.out.println("meetingID: "+ meetingID);
 					for (int u : usersID) {
 						invitationDAO.inviteUser(meetingID, u);
 					}
-					
+					connection.commit();
 					path = getServletContext().getContextPath() + "/Home";
 					response.sendRedirect(path);
+					
+					connection.setAutoCommit(true);
 					
 				}
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the meeting.");
 			}
 		}

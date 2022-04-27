@@ -1,14 +1,12 @@
 package it.polimi.tiw.beans;
 
-import java.util.Date;
-import java.sql.Time;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 
 public class Meeting {
 	private int id;
 	private int id_Creator;
 	private String title;
-	private Date startDate;
+	private Timestamp startDate;
 	private int duration;
 	private int capacity;
 	
@@ -30,10 +28,10 @@ public class Meeting {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 	public int getDuration() {

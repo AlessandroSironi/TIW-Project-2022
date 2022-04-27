@@ -2,6 +2,7 @@ package it.polimi.tiw.dao;
 
 import java.sql.Connection;
 import java.util.Date;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,14 +35,14 @@ private Connection connection;
 		
 		try(PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, IDUser);
-			pstatement.setDate(2, new java.sql.Date(date.getTime()));
+			pstatement.setObject(2, new java.sql.Timestamp(date.getTime()));
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (result.next()) {
 					Meeting meet = new Meeting();
 					meet.setId(result.getInt("ID"));
 					meet.setId_Creator(result.getInt("ID_Creator"));
 					meet.setTitle(result.getString("title"));
-					meet.setStartDate(result.getDate("startDate"));
+					meet.setStartDate(result.getTimestamp("startDate"));
 					meet.setDuration(result.getInt("duration"));
 					meet.setCapacity(result.getInt("capacity"));
 					
