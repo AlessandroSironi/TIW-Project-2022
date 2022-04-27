@@ -101,27 +101,30 @@ public class CheckInvitations extends HttpServlet {
 			}
 			usersID.add(id);
 		}
-		
+		int temp = 0;
 		if (usersID.size() > capacity) {
 			if (session.getAttribute("retry") == null)
 				session.setAttribute("retry", 1);
 			else {
-				int temp = (int) session.getAttribute("retry");
+				temp = (int) session.getAttribute("retry");
 				temp = temp + 1;
-				if (temp > 3) {
-					session.removeAttribute("retry");
-					path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
-					//send error to Error Page
-				} else {
-					session.setAttribute("retry", temp);
-					session.setAttribute("invitedUsersID", usersID);
-					path = getServletContext().getContextPath() + "/GoToRegistry";
-					
-					webContext.setVariable("attemptsErrorMsg", "Too many users selected.");
-					templateEngine.process(path,  webContext, response.getWriter());
-					
-					// send error to registry with selected items.
-				}
+			}
+			if (temp > 3) {
+				session.removeAttribute("retry");
+				session.removeAttribute("invitedUsersID");
+				
+				path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
+				//send error to Error Page
+			} else {
+				session.setAttribute("retry", temp);
+				System.out.println("retry: " + session.getAttribute("retry"));
+				session.setAttribute("invitedUsersID", usersID);
+				path = getServletContext().getContextPath() + "/Registry";
+				
+				webContext.setVariable("attemptsErrorMsg", "Too many users selected.");
+				response.sendRedirect(path);
+				
+				// send error to registry with selected items.
 			}
 		} else { //# of people invited is ok!
 			try {
@@ -142,6 +145,9 @@ public class CheckInvitations extends HttpServlet {
 					response.sendRedirect(path);
 					
 					connection.setAutoCommit(true);
+					
+					session.removeAttribute("retry");
+					session.removeAttribute("invitedUsersID");
 					
 				}
 				

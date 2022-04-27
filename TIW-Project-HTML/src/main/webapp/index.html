@@ -27,7 +27,7 @@
 				  <a class="btn btn-secondary" href="signup.html" role="button">Sign Up</a>
 				</form>
 		<!-- 		<p th:text=" ${loginErrorMsg}" th:classappend="${loginErrorMsg} ? alert alert-danger :  "></p> -->
-					<p th:if=" ${loginErrorMsg != null}" th:text=" ${loginErrorMsg}" th:class="alert alert-danger"></p>
+					<p th:if=" ${loginErrorMsg != null}" th:text=" ${loginErrorMsg}" th:class="alert-danger"></p>
 				</div>
 			<div class="col">
 				<h6 class="display-6 text-center">Sign Up</h6>
@@ -58,8 +58,8 @@
 				  <br>
 				  <button type="submit" class="btn btn-primary">Submit</button>
 				</form>
-				<p th:if=" ${signUpErrorMsg != null}" th:text=" ${signUpErrorMsg}" th:class="alert alert-danger"></p>
-				<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert alert-success"></p>
+				<p th:if=" ${signUpErrorMsg != null}" th:text=" ${signUpErrorMsg}" th:class="alert-danger"></p>
+				<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert-success"></p>
 				
 			</div>
 		</div>

@@ -31,7 +31,7 @@
       <p th:text="${'Duration: ' + session.meetingToCreate.duration}"></p>
       <p th:text="${'Capacity: ' + session.meetingToCreate.capacity}"></p>
       <br><br>
-      <p th:text=" ${attemptsErrorMsg}"></p>
+      <p th:if=" ${attemptsErrorMsg != null}" th:text=" ${attemptsErrorMsg}" th:class="alert-danger"></p>
       <p th:text="${'Please choose up to ' + session.meetingToCreate.capacity + ' users.'}">
       <br>
       <form action="CheckInvitations" method="POST">
