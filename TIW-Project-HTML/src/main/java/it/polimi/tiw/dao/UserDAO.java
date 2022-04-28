@@ -35,7 +35,6 @@ public class UserDAO {
 			pstatement1.setString(1, usrn);
 			try (ResultSet result1 = pstatement1.executeQuery();) {
 				if (!result1.isBeforeFirst()) {
-					System.out.println("User doesn't exists.");
 					return null;
 				}
 				else {

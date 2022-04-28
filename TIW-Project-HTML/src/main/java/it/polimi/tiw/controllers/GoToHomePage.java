@@ -63,7 +63,6 @@ public class GoToHomePage extends HttpServlet {
 		
 		try {
 			meetingsInvited = invitationDAO.findMeetingsByInvitation(user.getID());
-			System.out.println("User " + user.getID() + " was invited to meetings: " + meetingsInvited);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Encountered an error while loading meetings to which the user was invited to.");

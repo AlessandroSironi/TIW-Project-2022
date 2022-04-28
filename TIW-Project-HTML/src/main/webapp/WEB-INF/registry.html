@@ -6,16 +6,7 @@
 <title>Registry</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand px-2" th:href="@{/Home}">Plan2Meet</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <span class="navbar-text" th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></span>
-  </div>
-  <a class="btn btn-outline-light" th:href="@{/Logout}">Logout</a>
-</nav>
+<div th:insert="@{WEB-INF/fragments/navbar.html}"></div>
 
 <div class="container">
 	<h1 class="display-1 text-center">Plan2Meet</h1>

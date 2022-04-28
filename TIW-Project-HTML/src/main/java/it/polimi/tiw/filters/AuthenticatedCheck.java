@@ -29,10 +29,7 @@ public class AuthenticatedCheck implements Filter {
         chain.doFilter(request, response);
     }
 */
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-
-		System.out.print("Login checker filter executing ...\n");
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;

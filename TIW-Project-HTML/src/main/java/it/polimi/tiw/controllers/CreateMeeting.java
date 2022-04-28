@@ -86,20 +86,6 @@ public class CreateMeeting extends HttpServlet {
 					
 					session.setAttribute("meetingToCreate", meetingToCreate);
 					
-					/*
-					Cookie cTitle = new Cookie("title", title);
-					Cookie cDate = new Cookie("date", date.toString());
-					Cookie cDuration = new Cookie("duration", String.valueOf(duration));
-					Cookie cCapacity = new Cookie("capacity", String.valueOf(capacity));
-					
-					response.addCookie(cTitle);
-					response.addCookie(cDate);
-					response.addCookie(cDuration);
-					response.addCookie(cCapacity);
-					*/
-					
-					
-					
 					response.sendRedirect(path);
 				}
 			}

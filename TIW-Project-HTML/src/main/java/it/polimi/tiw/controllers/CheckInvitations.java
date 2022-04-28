@@ -69,7 +69,7 @@ public class CheckInvitations extends HttpServlet {
 		InvitationDAO invitationDAO = new InvitationDAO(connection);
 		
 		Meeting meetingToCreate = (Meeting) session.getAttribute("meetingToCreate");
-		System.out.println("CheckInvitations receinved meeting with title: "+ meetingToCreate.getTitle());
+		
 		int capacity = meetingToCreate.getCapacity();
 		
 		
@@ -78,7 +78,6 @@ public class CheckInvitations extends HttpServlet {
 		invitedUsersStrings = request.getParameterValues("usersInvited");
 
 		if (invitedUsersStrings == null) {
-			System.out.println("invitedUsersString == null");
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
 			return;
 		}
@@ -142,7 +141,7 @@ public class CheckInvitations extends HttpServlet {
 					connection.setAutoCommit(false);
 					meetingDAO.createMeeting(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
 					int meetingID = meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
-					System.out.println("meetingID: "+ meetingID);
+					
 					for (int u : usersIDInvited) {
 						invitationDAO.inviteUser(meetingID, u);
 					}
