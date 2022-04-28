@@ -99,7 +99,7 @@ public class UserDAO {
              
 			 pstatement.executeUpdate();
 			 
-			 System.out.println("Registered user: " + user);		 }
+		 }
 	} 
 	
 	public ArrayList<User> getOtherUsers (int iduser) throws SQLException {

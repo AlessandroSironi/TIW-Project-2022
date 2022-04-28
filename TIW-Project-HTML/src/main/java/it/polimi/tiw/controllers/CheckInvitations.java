@@ -83,7 +83,6 @@ public class CheckInvitations extends HttpServlet {
 		}
 
 		for (String s : invitedUsersStrings) {
-			System.out.println("Parsing ID: "+ s);
 			Integer id = Integer.parseInt(s);		
 			try {
 				if (!userDAO.checkUserIDExists(id)) {
