@@ -69,6 +69,12 @@ public class GoToHomePage extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Encountered an error while loading meetings to which the user was invited to.");
 			return;
 		}
+		
+		//Remove attributes relating to failed meeting creations, if user goes back to home page at any point
+		session.removeAttribute("retry");
+		session.removeAttribute("invitedUsersID");
+		session.removeAttribute("attemptsErrorMsg");
+		session.removeAttribute("meetingToCreate");
 
 		// Redirect to the Home page and add missions to the parameters
 		String path = "/WEB-INF/home.html";

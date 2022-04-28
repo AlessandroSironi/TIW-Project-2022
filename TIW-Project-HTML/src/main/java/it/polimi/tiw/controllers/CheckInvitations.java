@@ -62,8 +62,7 @@ public class CheckInvitations extends HttpServlet {
 		User userOwner = (User) session.getAttribute("user");
 		int userOwnerID = userOwner.getID();
 		
-		ArrayList<User> invitedUsers = new ArrayList<>();
-		ArrayList<Integer> usersID= new ArrayList<Integer>();
+		ArrayList<Integer> usersIDInvited = new ArrayList<Integer>();
 		
 		UserDAO userDAO = new UserDAO(connection);
 		MeetingDAO meetingDAO = new MeetingDAO(connection);
@@ -99,37 +98,44 @@ public class CheckInvitations extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			usersID.add(id);
+			usersIDInvited.add(id);
 		}
-		int temp = 0;
-		if (usersID.size() > capacity) {
+		
+		int temp = 1;
+		if (usersIDInvited.size() > capacity) {
 			if (session.getAttribute("retry") == null)
-				session.setAttribute("retry", 1);
+				session.setAttribute("retry", temp);
 			else {
 				temp = (int) session.getAttribute("retry");
 				temp = temp + 1;
 			}
-			if (temp > 3) {
+			if (temp >= 3) {
 				session.removeAttribute("retry");
 				session.removeAttribute("invitedUsersID");
 				
 				path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
+				response.sendRedirect(path);
 				//send error to Error Page
 			} else {
 				session.setAttribute("retry", temp);
 				System.out.println("retry: " + session.getAttribute("retry"));
-				session.setAttribute("invitedUsersID", usersID);
+				session.setAttribute("invitedUsersID", usersIDInvited);
 				path = getServletContext().getContextPath() + "/Registry";
 				
-				webContext.setVariable("attemptsErrorMsg", "Too many users selected.");
+				
+				int tooMany = usersIDInvited.size() - meetingToCreate.getCapacity();
+				String tooManyString = "Too many users selected. Please, deselect at least " + tooMany + " invitations.";
+			
+				session.setAttribute("attemptsErrorMsg", tooManyString);
 				response.sendRedirect(path);
+				
 				
 				// send error to registry with selected items.
 			}
 		} else { //# of people invited is ok!
 			try {
 				if (meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity()) != -1) {
-					path = getServletContext().getContextPath() + "/ErrorCreationMeeting"; 
+					path = getServletContext().getContextPath() + "/Home"; 
 					webContext.setVariable("attemptsErrorMsg", "Meeting already exists.");
 					templateEngine.process(path,  webContext, response.getWriter());
 				} else {
@@ -137,20 +143,19 @@ public class CheckInvitations extends HttpServlet {
 					meetingDAO.createMeeting(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
 					int meetingID = meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
 					System.out.println("meetingID: "+ meetingID);
-					for (int u : usersID) {
+					for (int u : usersIDInvited) {
 						invitationDAO.inviteUser(meetingID, u);
 					}
 					connection.commit();
-					path = getServletContext().getContextPath() + "/Home";
-					response.sendRedirect(path);
-					
 					connection.setAutoCommit(true);
 					
-					session.removeAttribute("retry");
-					session.removeAttribute("invitedUsersID");
+					path = getServletContext().getContextPath() + "/Home";
 					
 				}
-				
+				session.removeAttribute("retry");
+				session.removeAttribute("invitedUsersID");
+				session.removeAttribute("attemptsErrorMsg");
+				response.sendRedirect(path);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -28,6 +28,11 @@ version="4.0">
   <filter-mapping>
   	<filter-name>AuthenticatedCheck</filter-name>
   	<url-pattern>/Home</url-pattern>
+  	<url-pattern>/CheckInvitations</url-pattern>
+  	<url-pattern>/CreateMeeting</url-pattern>
+  	<url-pattern>/ErrorCreationMeeting</url-pattern>
+  	<url-pattern>/Registry</url-pattern>
+  	<url-pattern>/SignUp</url-pattern>
   </filter-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

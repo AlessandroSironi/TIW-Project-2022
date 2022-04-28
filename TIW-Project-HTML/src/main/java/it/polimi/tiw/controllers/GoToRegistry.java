@@ -52,6 +52,12 @@ public class GoToRegistry extends HttpServlet {
 		UserDAO userDAO = new UserDAO(connection);
 		ArrayList<User> users = new ArrayList<User>();
 		
+		ArrayList<Integer> usersIDInvited = new ArrayList<Integer>();
+		
+		if (session.getAttribute("invitedUsersID") == null)
+			session.setAttribute("invitedUsersID", usersIDInvited);
+		else usersIDInvited = (ArrayList<Integer>) session.getAttribute("invitedUsersID");
+				
 		try {
 			users = userDAO.getOtherUsers(currentUser.getID());
 		} catch (SQLException e) {
@@ -62,6 +68,7 @@ public class GoToRegistry extends HttpServlet {
 		String path = "/WEB-INF/registry.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		
 		ctx.setVariable("users", users);
 		templateEngine.process(path, ctx, response.getWriter());
 		
