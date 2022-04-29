@@ -72,25 +72,31 @@ public class SignUp extends HttpServlet {
 		        Matcher mat = pattern.matcher(mail);
 		        if (mat.matches()) { //Check if mail address is in the correct form.
 					if (password.equals(passwordRepeat)) { //Check if password and passwordRepeat match.
-						try {
-							UserDAO userDAO = new UserDAO (connection);
-							if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
-								webContext.setVariable("signUpErrorMsg", "Username already taken.");
-								path = "/index.html";
-								templateEngine.process(path,  webContext, response.getWriter());
-							} else {
-								userDAO.registerUser(mail, user, password, name, surname);
-								
-								webContext.setVariable("signUpOKMsg", "User has been registered. Please login.");
-								path = "/index.html";
-								templateEngine.process(path,  webContext, response.getWriter());
+						if(password.length() >= 6) {
+							try {
+								UserDAO userDAO = new UserDAO (connection);
+								if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
+									webContext.setVariable("signUpErrorMsg", "Username already taken.");
+									path = "/index.html";
+									templateEngine.process(path,  webContext, response.getWriter());
+								} else {
+									userDAO.registerUser(mail, user, password, name, surname);
+									
+									webContext.setVariable("signUpOKMsg", "User has been registered. Please login.");
+									path = "/index.html";
+									templateEngine.process(path,  webContext, response.getWriter());
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+							} catch (NoSuchAlgorithmException e) {
+								e.printStackTrace();
+							} catch (InvalidKeySpecException e) {
+								e.printStackTrace();
 							}
-						} catch (SQLException e) {
-							e.printStackTrace();
-						} catch (NoSuchAlgorithmException e) {
-							e.printStackTrace();
-						} catch (InvalidKeySpecException e) {
-							e.printStackTrace();
+						} else {
+							webContext.setVariable("signUpErrorMsg", "Passwords must be at least 6 characters.");
+							path = "/index.html";
+							templateEngine.process(path,  webContext, response.getWriter());
 						}
 					} else {
 						webContext.setVariable("signUpErrorMsg", "Passwords do not match.");
@@ -109,5 +115,4 @@ public class SignUp extends HttpServlet {
 			return;
 		}
 	}
-	
 }
