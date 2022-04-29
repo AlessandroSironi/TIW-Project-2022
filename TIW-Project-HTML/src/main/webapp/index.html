@@ -27,8 +27,8 @@
 				  <br>
 				  <button type="submit" class="btn btn-primary">Submit</button>
 				</form>
-		<!-- 		<p th:text=" ${loginErrorMsg}" th:classappend="${loginErrorMsg} ? alert alert-danger :  "></p> -->
 					<p th:if=" ${loginErrorMsg != null}" th:text=" ${loginErrorMsg}" th:class="alert-danger"></p>
+					<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert-success"></p>
 				</div>
 			<div class="col">
 				<h6 class="display-6 text-center">Sign Up</h6>

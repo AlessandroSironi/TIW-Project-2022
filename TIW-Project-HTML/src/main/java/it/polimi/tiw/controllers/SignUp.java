@@ -41,7 +41,7 @@ public class SignUp extends HttpServlet {
 	
 	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
+		final WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
 		
 		String path = null;
 		
@@ -58,10 +58,6 @@ public class SignUp extends HttpServlet {
 		mail = request.getParameter("mail");
 		name = request.getParameter("name");
 		surname = request.getParameter("surname");
-
-		
-		//TODO: check mail if input correctly.
-		//TODO: check if password password1 is the same.
 		
 		try {
 			if (user == null || user.isEmpty() || password == null || password.isEmpty() || passwordRepeat == null || passwordRepeat.isEmpty() ||
