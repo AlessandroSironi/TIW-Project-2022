@@ -66,8 +66,6 @@ public class CreateMeeting extends HttpServlet {
 			duration = Integer.parseInt(request.getParameter("duration"));
 			capacity = Integer.parseInt(request.getParameter("capacity"));
 			
-			System.out.println("Parsed Date: " + date.toString());
-			
 			if (getMeToday().after(date) || date == null) {
 				throw new Exception ("Error: the date must be today or later.");
 			} else {

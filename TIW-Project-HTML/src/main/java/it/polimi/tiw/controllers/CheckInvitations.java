@@ -116,7 +116,6 @@ public class CheckInvitations extends HttpServlet {
 				//send error to Error Page
 			} else {
 				session.setAttribute("retry", temp);
-				System.out.println("retry: " + session.getAttribute("retry"));
 				session.setAttribute("invitedUsersID", usersIDInvited);
 				path = getServletContext().getContextPath() + "/Registry";
 				
