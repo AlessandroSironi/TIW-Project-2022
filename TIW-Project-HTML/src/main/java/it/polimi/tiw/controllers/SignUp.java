@@ -73,7 +73,7 @@ public class SignUp extends HttpServlet {
 								UserDAO userDAO = new UserDAO (connection);
 								if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
 									webContext.setVariable("signUpErrorMsg", "Username already taken.");
-									path = "/index.html";
+									path = "/signup.html";
 									templateEngine.process(path,  webContext, response.getWriter());
 								} else {
 									userDAO.registerUser(mail, user, password, name, surname);
@@ -91,17 +91,17 @@ public class SignUp extends HttpServlet {
 							}
 						} else {
 							webContext.setVariable("signUpErrorMsg", "Passwords must be at least 6 characters.");
-							path = "/index.html";
+							path = "/signup.html";
 							templateEngine.process(path,  webContext, response.getWriter());
 						}
 					} else {
 						webContext.setVariable("signUpErrorMsg", "Passwords do not match.");
-						path = "/index.html";
+						path = "/signup.html";
 						templateEngine.process(path,  webContext, response.getWriter());
 					}
 				} else {
 					webContext.setVariable("signUpErrorMsg", "Please input a valid mail address.");
-					path = "/index.html";
+					path = "/signup.html";
 					templateEngine.process(path,  webContext, response.getWriter());
 				}
 			}
