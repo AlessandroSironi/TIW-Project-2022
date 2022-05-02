@@ -38,7 +38,7 @@ public class MeetingDAO {
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, ID_Owner);
-			pstatement.setDate(2, new java.sql.Date(date.getTime()));
+			pstatement.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
 			
 			try (ResultSet resultSet = pstatement.executeQuery()) {
 	               while (resultSet.next()) {

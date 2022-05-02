@@ -37,7 +37,7 @@ private Connection connection;
 				
 		try(PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, IDUser);
-			pstatement.setObject(2, new java.sql.Timestamp(date.getTime()));
+			pstatement.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
 			try (ResultSet result = pstatement.executeQuery();) {
 				while (result.next()) {
 					Meeting meet = new Meeting();
