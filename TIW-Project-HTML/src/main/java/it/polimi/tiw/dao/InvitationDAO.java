@@ -32,7 +32,7 @@ private Connection connection;
 		
 		ArrayList<Meeting> meetings = new ArrayList<>();
 		
-		String query = "SELECT M.ID, M.ID_Creator, M.title, M.startDate, M.duration, M.capacity FROM Invitation AS I JOIN Meeting AS M ON I.IDMeeting = M.ID WHERE I.IDUser = ? AND M.startDate > ?";
+		String query = "SELECT M.ID, M.ID_Creator, M.title, M.startDate, M.duration, M.capacity FROM Invitation AS I JOIN Meeting AS M ON I.IDMeeting = M.ID WHERE I.IDUser = ? AND M.startDate > ? ORDER BY M.startDate";
 		String query1 = "SELECT user FROM User WHERE ID = ?";
 				
 		try(PreparedStatement pstatement = connection.prepareStatement(query);) {

@@ -32,7 +32,7 @@ public class MeetingDAO {
 	
 	public ArrayList<Meeting> findMeetingsByOwner (int ID_Owner) throws SQLException {
 		ArrayList<Meeting> meetings = new ArrayList<>();
-		String query = "SELECT ID, ID_Creator, title, startDate, duration, capacity FROM Meeting WHERE ID_Creator = ? AND startDate > ?";
+		String query = "SELECT ID, ID_Creator, title, startDate, duration, capacity FROM Meeting WHERE ID_Creator = ? AND startDate > ? ORDER BY startDate";
 				
 		Date date = new Date(System.currentTimeMillis());
 		
