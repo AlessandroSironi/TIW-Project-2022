@@ -18,7 +18,11 @@ CREATE TABLE Meeting (
     title VARCHAR(100) NOT NULL,
     startDate DATETIME NOT NULL,
     duration INT NOT NULL,
-    capacity INT NOT NULL
+    capacity INT NOT NULL,
+
+    FOREIGN KEY (ID_Creator) REFERENCES User(ID)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Invitation (

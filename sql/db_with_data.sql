@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Creato il: Mag 02, 2022 alle 10:06
--- Versione del server: 8.0.28-0ubuntu0.20.04.3
+-- Creato il: Mag 04, 2022 alle 14:50
+-- Versione del server: 8.0.29-0ubuntu0.20.04.2
 -- Versione PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -78,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `Meeting` (
   `startDate` datetime NOT NULL,
   `duration` int NOT NULL,
   `capacity` int NOT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `ID_Creator` (`ID_Creator`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -135,6 +136,12 @@ INSERT INTO `User` (`ID`, `mail`, `user`, `psw_hash`, `psw_salt`, `name`, `surna
 ALTER TABLE `Invitation`
   ADD CONSTRAINT `Invitation_ibfk_1` FOREIGN KEY (`IDMeeting`) REFERENCES `Meeting` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Invitation_ibfk_2` FOREIGN KEY (`IDUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `Meeting`
+--
+ALTER TABLE `Meeting`
+  ADD CONSTRAINT `Meeting_ibfk_1` FOREIGN KEY (`ID_Creator`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
