@@ -106,7 +106,7 @@ public class SignUp extends HttpServlet {
 				}
 			}
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Missing or empty credential values.");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credential values.");
 			e.printStackTrace();
 			return;
 		}
