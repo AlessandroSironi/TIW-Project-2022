@@ -13,22 +13,6 @@ public class AuthenticatedCheck implements Filter {
         super();
     }
 	
-	/*@Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-
-        HttpServletRequest req = (HttpServletRequest) request;
-
-        HttpSession session = req.getSession();
-        if (session.isNew() || session.getAttribute("user") == null) {
-            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println("Error: unauthorized user");
-            return;
-        }
-        // pass the request along the filter chain
-        chain.doFilter(request, response);
-    }
-*/
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest req = (HttpServletRequest) request;

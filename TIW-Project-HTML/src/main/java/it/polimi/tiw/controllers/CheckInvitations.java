@@ -25,15 +25,6 @@ import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
-
-//TODO: check invitations takes post values from registry.html form and 
-	//validate if tentativi <= 3
-	// -> validate if #invites <= capacity
-	// -> if not, set (in session?) attribute "tentativi" or tentativi++
-	// -> if > 3 -> pagina cancellazione con link per home
-	//If valid, meetingDAO.registerMeeting() && for (Invitation i : invitations) invitationDAO.registerInvitation()
-
-
 @WebServlet("/CheckInvitations")
 public class CheckInvitations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -90,10 +81,8 @@ public class CheckInvitations extends HttpServlet {
 					return;
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			usersIDInvited.add(id);
@@ -154,12 +143,10 @@ public class CheckInvitations extends HttpServlet {
 				session.removeAttribute("attemptsErrorMsg");
 				response.sendRedirect(path);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				try {
 					connection.rollback();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the meeting.");
