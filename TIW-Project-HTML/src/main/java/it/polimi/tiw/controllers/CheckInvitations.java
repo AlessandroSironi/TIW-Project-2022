@@ -74,18 +74,23 @@ public class CheckInvitations extends HttpServlet {
 		}
 
 		for (String s : invitedUsersStrings) {
-			Integer id = Integer.parseInt(s);		
 			try {
-				if (!userDAO.checkUserIDExists(id)) {
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
-					return;
+				Integer id = Integer.parseInt(s);
+				try {
+					if (!userDAO.checkUserIDExists(id)) {
+						response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
+						return;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				usersIDInvited.add(id);
+			} catch (Exception e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
+				return;
 			}
-			usersIDInvited.add(id);
 		}
 		
 		int temp = 1;
