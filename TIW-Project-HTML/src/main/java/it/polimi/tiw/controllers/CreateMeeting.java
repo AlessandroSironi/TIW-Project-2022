@@ -69,7 +69,7 @@ public class CreateMeeting extends HttpServlet {
 			if (getMeToday().after(date) || date == null) {
 				throw new Exception ("Error: the date must be today or later.");
 			} else {
-				if (title == null || title.isEmpty() || duration < 0 || capacity < 0) {
+				if (title == null || title.isEmpty() || duration <= 0 || capacity <= 0) {
 					throw new Exception ("Error: missing values or bad input");
 				}
 				else {
