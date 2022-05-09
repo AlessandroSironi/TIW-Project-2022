@@ -9,67 +9,25 @@
 </head>
 <body class="personalized-background">
 	<div class="container shadow-lg p-3 mb-5 bg-body rounded mx-auto align-middle" style="background:white; border:10px; border-radius:20px; margin-top:50px">
-	<h1 class="display-1 text-center">Plan2Meet</h1>
-<!-- 		<div class="row"> -->
-<!-- 			<div class="col"> -->
-				
-				<h6 class="display-6 text-center">Login</h6>
-				
-				<form action="CheckLogin" method="POST">
-				  <div class="mb-3">
-				    <label class="form-label">Username</label>
-				    <input type="text" name="username" class="form-control" placeholder="Username" required>
-				  </div>
-				  <div class="mb-3">
-				    <label class="form-label">Password</label>
-				    <input type="password" name="password" class="form-control" placeholder="Password" required>
-				  </div>
-				  <br>
-				  <button type="submit" class="btn btn-primary">Submit</button>
-				  <a class="btn btn-outline-secondary" href="signup.html">Sign Up</a>
-				</form>
-					<p th:if=" ${loginErrorMsg != null}" th:text=" ${loginErrorMsg}" th:class="alert-danger"></p>
-					<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert-success"></p>
-<!-- 				</div> -->
-<!-- 			<div class="col"> -->
-<!-- 				<h6 class="display-6 text-center">Sign Up</h6> -->
-<!-- 					<form action="SignUp" method="POST"> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <label class="form-label">Username</label> -->
-<!-- 				    <input type="text" name="username" class="form-control" placeholder="Username" required> -->
-<!-- 				  </div> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <label class="form-label">Mail</label> -->
-<!-- 				    <input type="email" name="mail" class="form-control" placeholder="Mail" required> -->
-<!-- 				  </div> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <label class="form-label">Name</label> -->
-<!-- 				    <input type="text" name="name" class="form-control" placeholder="Name" required> -->
-<!-- 				  </div> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <label class="form-label">Surname</label> -->
-<!-- 				    <input type="text" name="surname" class="form-control" placeholder="Surname" required> -->
-<!-- 				  </div> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <label class="form-label">Password</label> -->
-<!-- 				    <input type="password" name="password" class="form-control" placeholder="Password" required> -->
-<!-- 				  </div> -->
-<!-- 				  <div class="mb-3"> -->
-<!-- 				    <input type="password" name="passwordRepeat" class="form-control" placeholder="Repeat password" required> -->
-<!-- 				  </div> -->
-<!-- 				  <br> -->
-<!-- 				  <button type="submit" class="btn btn-primary">Submit</button> -->
-<!-- 				</form> -->
-<!-- 				<p th:if=" ${signUpErrorMsg != null}" th:text=" ${signUpErrorMsg}" th:class="alert-danger"></p> -->
-<!-- 				<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert-success"></p> -->
-				
-<!-- 			</div> -->
-<!-- 		</div> -->
+	<h1 class="display-1 text-center">Plan2Meet</h1>	
+		<h6 class="display-6 text-center">Login</h6>
+		<form action="CheckLogin" method="POST">
+		  <div class="mb-3">
+		    <label class="form-label">Username</label>
+		    <input type="text" name="username" class="form-control" placeholder="Username" required>
+		  </div>
+		  <div class="mb-3">
+		    <label class="form-label">Password</label>
+		    <input type="password" name="password" class="form-control" placeholder="Password" required>
+		  </div>
+		  <br>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		  <a class="btn btn-outline-secondary" href="signup.html">Sign Up</a>
+		</form>
+			<p th:if=" ${loginErrorMsg != null}" th:text=" ${loginErrorMsg}" th:class="alert-danger"></p>
+			<p th:if=" ${signUpOKMsg != null}" th:text=" ${signUpOKMsg}" th:class="alert-success"></p>
 		<p class="text-center"><a href="ConnectionTester">Connection DB Tester</a></p>
 		<br>
 	</div>
-			
-	
-
 </body>
 </html>
