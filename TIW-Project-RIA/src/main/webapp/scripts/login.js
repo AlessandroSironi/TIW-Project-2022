@@ -49,6 +49,18 @@ function pswErrorSignUp() {
     }
 }
 
+function mailAddress() {
+    var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+    if (pattern.test(document.getElementById("mailSignUp").value)) {
+        document.getElementById("pswErrorMsg").style.display = "none";
+        return true;
+    } else {
+        showPasswordAlert("Input mail is invalid.");
+        return false;
+    }
+}
+
 //e: event
 (function () {
 
@@ -87,26 +99,29 @@ function pswErrorSignUp() {
 
     document.getElementById("signUpBtn").addEventListener("click", (e) => {
         if (pswErrorSignUp()) {
-            var form = document.getElementById("formSignUp");
-            if (form.checkValidity()) {
-                makeCall("POST", "SignUp", document.getElementById("formSignUp"), function (req) {
-                    if (req.readyState === XMLHttpRequest.DONE) {
-                        var msg = req.responseText;
-                        switch (req.status) {
-                            case 200:
-                                sessionStorage.setItem("user", msg);
-                                window.location.href = "./Home";
-                                break;
-                            default:
-                                document.getElementById("signUpErrorMsg").textContent = msg;
-                                document.getElementById("signUpErrorMsg").style.display = "block";
-                                break;
+            if (mailAddress()) {
+                var form = document.getElementById("formSignUp");
+                if (form.checkValidity()) {
+                    makeCall("POST", "SignUp", document.getElementById("formSignUp"), function (req) {
+                        if (req.readyState === XMLHttpRequest.DONE) {
+                            var msg = req.responseText;
+                            switch (req.status) {
+                                case 200:
+                                    sessionStorage.setItem("user", msg);
+                                    window.location.href = "./Home";
+                                    break;
+                                default:
+                                    document.getElementById("signUpErrorMsg").textContent = msg;
+                                    document.getElementById("signUpErrorMsg").style.display = "block";
+                                    break;
+                            }
                         }
-                    }
-                });
-            } else {
-                form.reportValidity();
+                    });
+                } else {
+                    form.reportValidity();
+                }
             }
         }
     });
+
 })(); //IIFE
