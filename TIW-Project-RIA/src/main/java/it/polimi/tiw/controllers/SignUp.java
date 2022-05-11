@@ -78,7 +78,11 @@ public class SignUp extends HttpServlet {
 									response.getWriter().println("Username already taken.");
 								} else {
 									userDAO.registerUser(mail, user, password, name, surname);
+									User userRegistered = userDAO.checkCredentials(user, password);
+									
+									request.getSession().setAttribute("user", userRegistered);
 									response.setStatus(HttpServletResponse.SC_OK);
+									response.setContentType("application/json");
 									response.getWriter().println(user);
 								}
 							} catch (SQLException e) {
