@@ -10,6 +10,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @WebServlet("/SignUp")
+@MultipartConfig
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
@@ -72,15 +74,12 @@ public class SignUp extends HttpServlet {
 							try {
 								UserDAO userDAO = new UserDAO (connection);
 								if (userDAO.checkUserExists(user)) { // Check that username is not already taken.
-									webContext.setVariable("signUpErrorMsg", "Username already taken.");
-									path = "/signup.html";
-									templateEngine.process(path,  webContext, response.getWriter());
+									response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+									response.getWriter().println("Username already taken.");
 								} else {
 									userDAO.registerUser(mail, user, password, name, surname);
-									
-									webContext.setVariable("signUpOKMsg", "User has been registered. Please login.");
-									path = "/index.html";
-									templateEngine.process(path,  webContext, response.getWriter());
+									response.setStatus(HttpServletResponse.SC_OK);
+									response.getWriter().println(user);
 								}
 							} catch (SQLException e) {
 								e.printStackTrace();
@@ -90,23 +89,21 @@ public class SignUp extends HttpServlet {
 								e.printStackTrace();
 							}
 						} else {
-							webContext.setVariable("signUpErrorMsg", "Passwords must be at least 6 characters.");
-							path = "/signup.html";
-							templateEngine.process(path,  webContext, response.getWriter());
+							response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+							response.getWriter().println("Passwords must be at least 6 characters.");
 						}
 					} else {
-						webContext.setVariable("signUpErrorMsg", "Passwords do not match.");
-						path = "/signup.html";
-						templateEngine.process(path,  webContext, response.getWriter());
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.getWriter().println("Passwords do not match.");
 					}
 				} else {
-					webContext.setVariable("signUpErrorMsg", "Please input a valid mail address.");
-					path = "/signup.html";
-					templateEngine.process(path,  webContext, response.getWriter());
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.getWriter().println("Please input a valid mail address.");
 				}
 			}
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credential values.");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing or empty credentials.");
 			e.printStackTrace();
 			return;
 		}

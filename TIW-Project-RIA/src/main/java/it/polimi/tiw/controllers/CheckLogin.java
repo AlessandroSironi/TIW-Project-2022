@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import it.polimi.tiw.utils.ConnectionHandler;
 
 
 @WebServlet ("/CheckLogin")
+@MultipartConfig
 public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -52,7 +54,8 @@ public class CheckLogin extends HttpServlet {
 			if (usr == null || pwd == null || usr.isEmpty() || pwd.isEmpty())
 					throw new Exception ("Error: missing or empty credential value");
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credentials");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Please fill in all fields.");
 			return;
 		}
 		
@@ -62,8 +65,9 @@ public class CheckLogin extends HttpServlet {
 		try {
 			user = userDao.checkCredentials(usr, pwd);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to check credentials");
-			return;
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Server Error: couldn't check credentials.");
+            return;
 		}
 		
 		// If user exists, add info to the session and go to Main Page. 
@@ -72,15 +76,16 @@ public class CheckLogin extends HttpServlet {
 		String path = null;
 		
 		if (user == null) {
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("loginErrorMsg", "Incorrect username or password");
-			path = "/index.html";
-			templateEngine.process(path,  ctx, response.getWriter());
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("Invalid credentials.");
+            return;
 		} else {
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/Home";
-			response.sendRedirect(path);
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentType("application/json");
+			response.getWriter().println(user);
+//			path = getServletContext().getContextPath() + "/Home";
+//			response.sendRedirect(path);
 		}
 	}
 	
