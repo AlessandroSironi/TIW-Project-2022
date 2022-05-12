@@ -12,7 +12,7 @@
 <!--     <span class="navbar-toggler-icon"></span> -->
 <!--   </button> -->
   <div class="collapse navbar-collapse" id="navbarText">
-    <span class="navbar-text" th:text="${'Nice to see you again, ' + session.user.Name + ' ' + session.user.Surname}"></span>
+    <span class="navbar-text" th:text="${'Nice to see you, ' + session.user.Name + ' ' + session.user.Surname}"></span>
   </div>
   <a class="btn btn-outline-light" th:href="@{/Logout}">Logout</a>
 </nav>
