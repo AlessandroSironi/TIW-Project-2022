@@ -17,9 +17,9 @@ function showLoginAlert (msg) {
     document.getElementById("loginErrorMsg").textContent = msg;
 }
 
-function showPasswordAlert(msg) {
-    document.getElementById("pswErrorMsg").style.display = "block";
-    document.getElementById("pswErrorMsg").textContent = msg;
+function showSignUpAlert(msg) {
+    document.getElementById("signUpErrorMsg").style.display = "block";
+    document.getElementById("signUpErrorMsg").textContent = msg;
 }
 
 //document.getElementById("pswSignUp").onchange = pswErrorSignUp;
@@ -30,21 +30,27 @@ function pswErrorSignUp() {
     let psw1 = document.getElementById("pswSignUp").value;
     let psw2 = document.getElementById("psw2SignUp").value;
 
-    if (psw1 === "") showPasswordAlert("Enter a password...");
-    else if (psw2 === "") showPasswordAlert("Please enter the confirmation password...");
+    if (psw1 === "") {
+        showSignUpAlert("Enter a password...");
+        return false;
+    }
+    else if (psw2 === "") {
+        showSignUpAlert("Please enter the confirmation password...");
+        return false;
+    }
 
     // If not valid, return false
     else if (psw1 !== psw2) {
-        showPasswordAlert("Password don't match.")
+        showSignUpAlert("Password don't match.")
         return false;
     }
     else if (psw1.length < 6) {
-        showPasswordAlert("Password is too short: at least 6 characters.");
+        showSignUpAlert("Password is too short: at least 6 characters.");
         return false;
     }
     else {
-        document.getElementById("pswErrorMsg").style.display = "none";
-        document.getElementById("pswErrorMsg").textContent = "";
+        document.getElementById("signUpErrorMsg").style.display = "none";
+        document.getElementById("signUpErrorMsg").textContent = "";
         return true;
     }
 }
@@ -53,10 +59,10 @@ function mailAddress() {
     var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
     if (pattern.test(document.getElementById("mailSignUp").value)) {
-        document.getElementById("pswErrorMsg").style.display = "none";
+        document.getElementById("signUpErrorMsg").style.display = "none";
         return true;
     } else {
-        showPasswordAlert("Input mail is invalid.");
+        showSignUpAlert("Input mail is invalid.");
         return false;
     }
 }
@@ -66,11 +72,11 @@ function mailAddress() {
 
     document.getElementById("showSignUpBtn").addEventListener("click", (e) => {
         showSignUp();
-    })
+    });
 
     document.getElementById("showLoginBtn").addEventListener("click", (e) => {
         showLogin();
-    })
+    });
 
     document.getElementById("loginBtn").addEventListener("click", (e) => {
         var formLogin = document.getElementById("formLogin");
@@ -85,8 +91,7 @@ function mailAddress() {
                             window.location.href= "./Home";
                             break;
                         default:
-                            document.getElementById("loginErrorMsg").textContent = msg;
-                            document.getElementById("loginErrorMsg").style.display = "block";
+                            showLoginAlert(msg);
                             break;
                     }
                 }
@@ -111,8 +116,7 @@ function mailAddress() {
                                     window.location.href = "./Home";
                                     break;
                                 default:
-                                    document.getElementById("signUpErrorMsg").textContent = msg;
-                                    document.getElementById("signUpErrorMsg").style.display = "block";
+                                    showSignUpAlert(msg);
                                     break;
                             }
                         }

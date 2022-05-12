@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/Home")
+@MultipartConfig
 public class GoToHomePage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
@@ -47,6 +50,11 @@ public class GoToHomePage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+		
+		Cookie cookieName = new Cookie("name", user.getName());
+		Cookie cookieSurname = new Cookie("surname", user.getSurname());
+		response.addCookie(cookieName);
+		response.addCookie(cookieSurname);
 		
 		MeetingDAO meetingDAO = new MeetingDAO(connection);
 		ArrayList<Meeting> meetingsCreated = new ArrayList<Meeting>();
