@@ -20,20 +20,23 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.InvitationDAO;
 import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
-@WebServlet("/Home")
+@WebServlet("/GetMeetings")
 @MultipartConfig
-public class GoToHomePage extends HttpServlet {
+public class GetMeetings extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	private Connection connection = null;
 
-	public GoToHomePage() {
+	public GetMeetings() {
 		super();
 	}
 
@@ -50,11 +53,6 @@ public class GoToHomePage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		
-		Cookie cookieName = new Cookie("name", user.getName());
-		Cookie cookieSurname = new Cookie("surname", user.getSurname());
-		response.addCookie(cookieName);
-		response.addCookie(cookieSurname);
 		
 		MeetingDAO meetingDAO = new MeetingDAO(connection);
 		ArrayList<Meeting> meetingsCreated = new ArrayList<Meeting>();
@@ -77,19 +75,33 @@ public class GoToHomePage extends HttpServlet {
 			return;
 		}
 		
+		Gson gson = new GsonBuilder().create(); //TODO: Date format? Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd").create();
+		String jsonMeetingsCreated = gson.toJson(meetingsCreated);
+		String jsonMeetingsInvited = gson.toJson(meetingsInvited);
+		
+		String bothJson = "[" + jsonMeetingsCreated + "," + jsonMeetingsInvited + "]";
+		
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		
+		response.getWriter().write(bothJson);
+		
+		// Write json on the response
+		
+		
 		//Remove attributes relating to failed meeting creations, if user goes back to home page at any point
-		session.removeAttribute("retry");
-		session.removeAttribute("invitedUsersID");
-		session.removeAttribute("attemptsErrorMsg");
-		session.removeAttribute("meetingToCreate");
+//		session.removeAttribute("retry");
+//		session.removeAttribute("invitedUsersID");
+//		session.removeAttribute("attemptsErrorMsg");
+//		session.removeAttribute("meetingToCreate");
 
 		// Redirect to the Home page and add missions to the parameters
-		String path = "/WEB-INF/home.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("meetingsCreated", meetingsCreated);
-		ctx.setVariable("meetingsInvited", meetingsInvited);
-		templateEngine.process(path, ctx, response.getWriter());
+//		String path = "/WEB-INF/home.html";
+//		ServletContext servletContext = getServletContext();
+//		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+//		ctx.setVariable("meetingsCreated", meetingsCreated);
+//		ctx.setVariable("meetingsInvited", meetingsInvited);
+//		templateEngine.process(path, ctx, response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

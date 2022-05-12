@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,6 +80,11 @@ public class SignUp extends HttpServlet {
 								} else {
 									userDAO.registerUser(mail, user, password, name, surname);
 									User userRegistered = userDAO.checkCredentials(user, password);
+									
+									Cookie cookieName = new Cookie("name", userRegistered.getName());
+									Cookie cookieSurname = new Cookie("surname", userRegistered.getSurname());
+									response.addCookie(cookieName);
+									response.addCookie(cookieSurname);
 									
 									request.getSession().setAttribute("user", userRegistered);
 									response.setStatus(HttpServletResponse.SC_OK);

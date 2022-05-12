@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +65,7 @@ public class CheckLogin extends HttpServlet {
 		
 		try {
 			user = userDao.checkCredentials(usr, pwd);
+			
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Server Error: couldn't check credentials.");
@@ -80,6 +82,11 @@ public class CheckLogin extends HttpServlet {
             response.getWriter().println("Invalid credentials.");
             return;
 		} else {
+			Cookie cookieName = new Cookie("name", user.getName());
+			Cookie cookieSurname = new Cookie("surname", user.getSurname());
+			response.addCookie(cookieName);
+			response.addCookie(cookieSurname);
+			
 			request.getSession().setAttribute("user", user);
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");

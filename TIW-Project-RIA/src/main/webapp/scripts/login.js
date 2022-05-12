@@ -88,7 +88,7 @@ function mailAddress() {
                     switch (req.status) {
                         case 200: 
                             sessionStorage.setItem("user", msg);
-                            window.location.href= "./Home";
+                            window.location.href= "./home.html";
                             break;
                         default:
                             showLoginAlert(msg);
@@ -113,7 +113,7 @@ function mailAddress() {
                             switch (req.status) {
                                 case 200:
                                     sessionStorage.setItem("user", msg);
-                                    window.location.href = "./Home";
+                                    window.location.href = "./home.html";
                                     break;
                                 default:
                                     showSignUpAlert(msg);
