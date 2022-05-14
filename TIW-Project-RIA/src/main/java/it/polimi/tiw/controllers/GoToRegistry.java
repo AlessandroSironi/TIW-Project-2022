@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.google.gson.Gson;
+
 import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.InvitationDAO;
@@ -26,6 +29,7 @@ import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/Registry")
+@MultipartConfig
 public class GoToRegistry extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
@@ -61,16 +65,24 @@ public class GoToRegistry extends HttpServlet {
 		try {
 			users = userDAO.getOtherUsers(currentUser.getID());
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Encountered an error while loading the users.");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
-		String path = "/WEB-INF/registry.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+//		String path = "/WEB-INF/registry.html";
+//		ServletContext servletContext = getServletContext();
+//		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+//		
+//		ctx.setVariable("users", users);
+//		templateEngine.process(path, ctx, response.getWriter());
 		
-		ctx.setVariable("users", users);
-		templateEngine.process(path, ctx, response.getWriter());
+		Gson gson = new Gson();
+		String json = gson.toJson(users);
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 		
 	}
 

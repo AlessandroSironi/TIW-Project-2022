@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +22,15 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.google.gson.Gson;
+
 import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/CreateMeeting")
+@MultipartConfig
 public class CreateMeeting extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -74,7 +78,7 @@ public class CreateMeeting extends HttpServlet {
 				}
 				else {
 					//path = getServletContext().getContextPath() + "/Registry?title=" + title + "&date=" + dateString + "&duration=" + duration + "&capacity=" + capacity;
-					path = getServletContext().getContextPath() + "/Registry";
+					//path = getServletContext().getContextPath() + "/Registry";
 					
 					Meeting meetingToCreate = new Meeting();
 					meetingToCreate.setTitle(title);
@@ -84,12 +88,18 @@ public class CreateMeeting extends HttpServlet {
 					
 					session.setAttribute("meetingToCreate", meetingToCreate);
 					
-					response.sendRedirect(path);
+					Gson gson = new Gson();
+					String json = gson.toJson(meetingToCreate);
+					
+					response.setStatus(HttpServletResponse.SC_OK);
+					response.setContentType("application/json");
+			        response.setCharacterEncoding("UTF-8");
+			        response.getWriter().write(json);
 				}
 			}
 
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error: missing values or bad input.");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			e.printStackTrace();
 			return;
 		}

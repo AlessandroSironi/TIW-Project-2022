@@ -125,7 +125,7 @@
         };
 
         this.update = function (meetingsInvitedArray) {
-            var elem, i, row, title, date, duration, capacity, invited_by;
+            var elem, i, row, titleCell, dateCell, durationCell, capacityCell, invitedByCell;
             this.meetingsInvitedBody.innerHTML = ""; //Empty all data present.
 
             var self = this;
