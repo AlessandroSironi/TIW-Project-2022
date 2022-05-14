@@ -67,65 +67,78 @@ function mailAddress() {
     }
 }
 
-//e: event
-(function () {
+//If user hits enter in a form, mimic a button click.
 
-    document.getElementById("showSignUpBtn").addEventListener("click", (e) => {
-        showSignUp();
-    });
+document.getElementById("formLogin").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("loginBtn").click();
+    }
+});
 
-    document.getElementById("showLoginBtn").addEventListener("click", (e) => {
-        showLogin();
-    });
+document.getElementById("formSignUp").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("signUpBtn").click();
+    }
+});
 
-    document.getElementById("loginBtn").addEventListener("click", (e) => {
-        var formLogin = document.getElementById("formLogin");
 
-        if (formLogin.checkValidity()) {//HTML settings 
-            makeCall("POST", "CheckLogin", document.getElementById("formLogin"), function (req) {
-                if (req.readyState === XMLHttpRequest.DONE) {
-                    var msg = req.responseText;
-                    switch (req.status) {
-                        case 200: 
-                            sessionStorage.setItem("user", msg);
-                            window.location.href= "./home.html";
-                            break;
-                        default:
-                            showLoginAlert(msg);
-                            break;
-                    }
+
+document.getElementById("showSignUpBtn").addEventListener("click", (e) => {
+    showSignUp();
+});
+
+document.getElementById("showLoginBtn").addEventListener("click", (e) => {
+    showLogin();
+});
+
+document.getElementById("loginBtn").addEventListener("click", (e) => {
+    var formLogin = document.getElementById("formLogin");
+
+    if (formLogin.checkValidity()) {//HTML settings 
+        makeCall("POST", "CheckLogin", document.getElementById("formLogin"), function (req) {
+            if (req.readyState === XMLHttpRequest.DONE) {
+                var msg = req.responseText;
+                switch (req.status) {
+                    case 200: 
+                        sessionStorage.setItem("user", msg);
+                        window.location.href= "./home.html";
+                        break;
+                    default:
+                        showLoginAlert(msg);
+                        break;
                 }
             }
-        );
-        } else {
-            formLogin.reportValidity(); //When false is returned, cancelable invalid events are fired for each invalid child and validation problems are reported to the user.
         }
-    });
+    );
+    } else {
+        formLogin.reportValidity(); //When false is returned, cancelable invalid events are fired for each invalid child and validation problems are reported to the user.
+    }
+});
 
-    document.getElementById("signUpBtn").addEventListener("click", (e) => {
-        if (pswErrorSignUp()) {
-            if (mailAddress()) {
-                var form = document.getElementById("formSignUp");
-                if (form.checkValidity()) {
-                    makeCall("POST", "SignUp", document.getElementById("formSignUp"), function (req) {
-                        if (req.readyState === XMLHttpRequest.DONE) {
-                            var msg = req.responseText;
-                            switch (req.status) {
-                                case 200:
-                                    sessionStorage.setItem("user", msg);
-                                    window.location.href = "./home.html";
-                                    break;
-                                default:
-                                    showSignUpAlert(msg);
-                                    break;
-                            }
+document.getElementById("signUpBtn").addEventListener("click", (e) => {
+    var form = document.getElementById("formSignUp");
+    if (pswErrorSignUp()) {
+        if (mailAddress()) {
+            if (form.checkValidity()) {
+                makeCall("POST", "SignUp", document.getElementById("formSignUp"), function (req) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
+                        var msg = req.responseText;
+                        switch (req.status) {
+                            case 200:
+                                sessionStorage.setItem("user", msg);
+                                window.location.href = "./home.html";
+                                break;
+                            default:
+                                showSignUpAlert(msg);
+                                break;
                         }
-                    });
-                } else {
-                    form.reportValidity();
-                }
+                    }
+                });
+            } else {
+                form.reportValidity();
             }
         }
-    });
-
-})(); //IIFE
+    }
+});
