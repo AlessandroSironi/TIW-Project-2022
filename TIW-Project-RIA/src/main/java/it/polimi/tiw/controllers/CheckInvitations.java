@@ -71,7 +71,8 @@ public class CheckInvitations extends HttpServlet {
 		invitedUsersStrings = request.getParameterValues("usersInvited");
 
 		if (invitedUsersStrings == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().write("Missing parameters.");
 			return;
 		}
 
@@ -80,7 +81,8 @@ public class CheckInvitations extends HttpServlet {
 				Integer id = Integer.parseInt(s);
 				try {
 					if (!userDAO.checkUserIDExists(id)) {
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.getWriter().write("Invalid parameters.");
 						return;
 					}
 				} catch (SQLException e) {
@@ -90,7 +92,8 @@ public class CheckInvitations extends HttpServlet {
 				}
 				usersIDInvited.add(id);
 			} catch (Exception e) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("Invalid parameters.");
 				return;
 			}
 		}
@@ -107,20 +110,24 @@ public class CheckInvitations extends HttpServlet {
 				session.removeAttribute("retry");
 				session.removeAttribute("invitedUsersID");
 				
-				path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
-				response.sendRedirect(path);
+				//path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
+				//response.sendRedirect(path);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("Error: too many attempts.");
 				//send error to Error Page
 			} else {
 				session.setAttribute("retry", temp);
 				session.setAttribute("invitedUsersID", usersIDInvited);
-				path = getServletContext().getContextPath() + "/Registry";
+				//path = getServletContext().getContextPath() + "/Registry";
 				
 				
 				int tooMany = usersIDInvited.size() - meetingToCreate.getCapacity();
 				String tooManyString = "Too many users selected. Please, deselect at least " + tooMany + " invitations.";
 			
-				session.setAttribute("attemptsErrorMsg", tooManyString);
-				response.sendRedirect(path);
+				//session.setAttribute("attemptsErrorMsg", tooManyString);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write(tooManyString);
+				
 				
 				
 				// send error to registry with selected items.
@@ -142,13 +149,15 @@ public class CheckInvitations extends HttpServlet {
 					connection.commit();
 					connection.setAutoCommit(true);
 					
-					path = getServletContext().getContextPath() + "/Home";
+					//path = getServletContext().getContextPath() + "/Home";
 					
 				}
 				session.removeAttribute("retry");
 				session.removeAttribute("invitedUsersID");
 				session.removeAttribute("attemptsErrorMsg");
-				response.sendRedirect(path);
+				
+				response.setStatus(HttpServletResponse.SC_OK);
+				//response.sendRedirect(path);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				try {
@@ -156,7 +165,8 @@ public class CheckInvitations extends HttpServlet {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the meeting.");
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().write("Error in creating the meeting.");
 			}
 		}
 		

@@ -31,9 +31,6 @@
         document.getElementById("meetingsInvitedBody")
     );
     
-    //var newMeetingForm = new NewMeetingForm (document.getElementById("newMeetingForm"));
-    
-    
       
     function MeetingsCreated (_meetingsCreatedTable, _meetingsCreatedBody) {
         this.meetingsCreatedTable = _meetingsCreatedTable;

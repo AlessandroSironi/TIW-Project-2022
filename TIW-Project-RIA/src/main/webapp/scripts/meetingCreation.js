@@ -2,7 +2,7 @@
  * New Meeting Creation Manager
  */
 
-( function() { //Avoid variables ending in the global scope
+//( function() { //Avoid variables ending in the global scope
 
     function showErrorAlert(msg) {
         alert(msg);
@@ -26,6 +26,7 @@
 
         this.reset = function() {
             this.list.style.visibility = "hidden";
+            this.list.innerHtml = "";
         };
 
         this.show = function() {
@@ -50,7 +51,9 @@
 
             this.update = function (invitationList) {
                 var row, checkBoxCell, nameCell, surnameCell, mailCell;
+
                 this.list.innerHtml = ""; //Empty content
+                this.reset();
 
                 var self = this;
 
@@ -60,7 +63,8 @@
                     checkBoxCell = document.createElement("input");
                     checkBoxCell.type = "checkbox";
                     checkBoxCell.className = "form-check-input";
-                    checkBoxCell.value = user.Id;
+                    checkBoxCell.name = "usersInvited";
+                    checkBoxCell.value = user.id;
                     row.appendChild(checkBoxCell);
 
                     nameCell = document.createElement("td");
@@ -112,6 +116,7 @@
 
     function resetMeetingInfo () {
         sessionStorage.removeItem("meeting");
+        sessionStorage.removeItem("invitationAttempts");
     }
 
     function checkMeetingInfo() {
@@ -128,7 +133,6 @@
     }
 
     function showModal() {
-
         $("#invitationModal").modal("show");
         
         let invitationList = new InvitationList (
@@ -136,20 +140,35 @@
             document.getElementById("invitationsTableBody")
         );
 
+        invitationList.list.innerHtml = "";
         invitationList.reset();
         invitationList.show();
         document.getElementById("modalAlertMsg").style.display = "none";
+        resetInvitationAttempts();
     }
 
     function getInvitationAttempts () {
         return parseInt(sessionStorage.getItem("invitationAttempts"));
     }
 
+    function resetInvitationAttempts() {
+        sessionStorage.setItem("invitationAttempts", "0");
+    }
+
     function incrementInvitationAttempts() {
         let temp = getInvitationAttempts();
-        temp += 1;
+        temp++;
+        console.log("Attempts: " + temp);
         
         sessionStorage.setItem("invitationAttempts", temp.toString());
+
+        makeCall("POST", "IncreaseAttempts", null, function (req) {
+            if (req.readyState == XMLHttpRequest.DONE) {
+                if (req.status != 200) {
+                    showErrorAlert(req.responseText);
+                }
+            }
+        });
     }
 
     function showModalError(msg) {
@@ -157,22 +176,30 @@
         document.getElementById("modalAlertMsg").style.display = "block";
     }
 
-    document.getElementById("inviteModalBtn").addEventListener ("click", (e) => {
+    //document.getElementById("inviteModalBtn").addEventListener ("click", (e) => {
+    $('#inviteModalBtn').on("click", function () {
+        
+    //});
         var form = document.getElementById("invitationForm");
-        var selectedUsers = getSelectedUsers();
-        if (selectedUsers.length <= 0) {
+        var selectedUsersNumber = getSelectedUsersNumber();
+
+        if (selectedUsersNumber <= 0) {
             showModalError("Please select at least one user.");
-        } else if (selectedUsers.length > getMeetingInfo().capacity) {
+        } else if (selectedUsersNumber > getMeetingInfo().capacity) {
             incrementInvitationAttempts();
-            let usersToRemove = selectedUsers.length - (getMeetingInfo().capacity);
-            showModalError("Too many users selected. Please, deselect at least " + usersToRemove + "invitations.")
+            let usersToRemove = selectedUsersNumber - (getMeetingInfo().capacity);
+            showModalError("Too many users selected. Please, deselect at least " + usersToRemove + " invitations. Attempts: " + getInvitationAttempts());
         } else {
             if (form.checkValidity()) {
                 makeCall("POST", "CheckInvitations", form, function(req) {
                     if (req.readyState == XMLHttpRequest.DONE) {
+                        var msg = req.responseText;
                         if (req.status == 200) {
                             showSuccessCreationMeeting("The meeting has been created.");
                             refreshMeetings();
+                            resetMeetingInfo();
+                        } else {
+                            showModalError(msg);
                         }
                     }
                 });
@@ -182,17 +209,50 @@
             return;
         } 
         if (getInvitationAttempts() >= 3) {
+            $("#invitationModal").modal("hide");
             refreshMeetings();
-            showErrorAlert("Error: too many attempts to create a meeting with too many users.");
+            showErrorCreationMeeting("Error: too many attempts to create a meeting with too many users.");
+            return;
         }
     });
 
     function refreshMeetings() {
         //TODO: refresh meetingTables, close modal.
+        var meetingsCreated = new MeetingsCreated (
+            document.getElementById("meetingsCreatedTable"),
+            document.getElementById("meetingsCreatedBody")
+        );
+        
+        var meetingsInvited = new MeetingsInvited (
+            document.getElementById("meetingsInvitedTable"),
+            document.getElementById("meetingsInvitedBody")
+        );
+
+        meetingsCreated.reset();
+        meetingsInvited.reset();
+        meetingsCreated.show();
+        meetingsInvited.show();
+    }
+
+    function getSelectedUsersNumber() {
+        let checkboxes = document.getElementById("invitationsTableBody").getElementsByClassName("form-check-input");
+        let number = 0;
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                number++;
+            }
+        }
+
+        return number;
     }
 
     document.getElementById("closeModalBtn").addEventListener("click", (e) => {
         //delete meeting from sessionStorage and session tomcat servlet (?).
+        $("#invitationModal").modal("hide");
+        resetMeetingInfo();
+        refreshMeetings();
     });
 
-})(); //IIFE
+
+//})(); //IIFE
