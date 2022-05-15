@@ -2,7 +2,7 @@
  * New Meeting Creation Manager
  */
 
-//( function() { //Avoid variables ending in the global scope
+( function() { //Avoid variables ending in the global scope
 
     function showErrorAlert(msg) {
         alert(msg);
@@ -198,6 +198,7 @@
                             showSuccessCreationMeeting("The meeting has been created.");
                             refreshMeetings();
                             resetMeetingInfo();
+                            resetModalContent();
                         } else {
                             showModalError(msg);
                         }
@@ -209,9 +210,11 @@
             return;
         } 
         if (getInvitationAttempts() >= 3) {
-            $("#invitationModal").modal("hide");
-            refreshMeetings();
             showErrorCreationMeeting("Error: too many attempts to create a meeting with too many users.");
+            resetMeetingInfo();
+            resetModalContent();
+            $("#invitationModal").modal("hide");
+            //refreshMeetings();
             return;
         }
     });
@@ -232,6 +235,7 @@
         meetingsInvited.reset();
         meetingsCreated.show();
         meetingsInvited.show();
+        resetModalContent();
     }
 
     function getSelectedUsersNumber() {
@@ -251,8 +255,13 @@
         //delete meeting from sessionStorage and session tomcat servlet (?).
         $("#invitationModal").modal("hide");
         resetMeetingInfo();
+        resetModalContent();
         refreshMeetings();
     });
 
+    function resetModalContent() {
+        document.getElementById("invitationsTableBody").innerHTML="";
+        document.getElementById("modalAlertMsg").style.display = "none";
+    }
 
-//})(); //IIFE
+})(); //IIFE
