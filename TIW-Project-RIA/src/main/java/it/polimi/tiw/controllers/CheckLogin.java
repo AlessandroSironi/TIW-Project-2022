@@ -91,8 +91,6 @@ public class CheckLogin extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");
 			response.getWriter().println(user);
-//			path = getServletContext().getContextPath() + "/Home";
-//			response.sendRedirect(path);
 		}
 	}
 	

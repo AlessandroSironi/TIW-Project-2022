@@ -30,12 +30,12 @@ import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/Registry")
 @MultipartConfig
-public class GoToRegistry extends HttpServlet {
+public class GetRegistry extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	private Connection connection = null;
 
-	public GoToRegistry() {
+	public GetRegistry() {
 		super();
 	}
 
@@ -68,14 +68,7 @@ public class GoToRegistry extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
-		
-//		String path = "/WEB-INF/registry.html";
-//		ServletContext servletContext = getServletContext();
-//		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//		
-//		ctx.setVariable("users", users);
-//		templateEngine.process(path, ctx, response.getWriter());
-		
+				
 		Gson gson = new Gson();
 		String json = gson.toJson(users);
 		
