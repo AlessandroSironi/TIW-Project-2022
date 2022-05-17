@@ -56,8 +56,6 @@ public class IncreaseAttempts extends HttpServlet {
 			session.removeAttribute("invitedUsersID");
 			session.removeAttribute("meetingToCreate");
 			
-			//path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
-			//response.sendRedirect(path);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().write("Error: too many attempts.");
 		} else {

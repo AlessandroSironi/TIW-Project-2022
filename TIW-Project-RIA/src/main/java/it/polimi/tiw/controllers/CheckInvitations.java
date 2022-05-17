@@ -110,21 +110,16 @@ public class CheckInvitations extends HttpServlet {
 				session.removeAttribute("retry");
 				session.removeAttribute("invitedUsersID");
 				
-				//path = getServletContext().getContextPath() + "/ErrorCreationMeeting";
-				//response.sendRedirect(path);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write("Error: too many attempts.");
 				//send error to Error Page
 			} else {
 				session.setAttribute("retry", temp);
 				session.setAttribute("invitedUsersID", usersIDInvited);
-				//path = getServletContext().getContextPath() + "/Registry";
-				
 				
 				int tooMany = usersIDInvited.size() - meetingToCreate.getCapacity();
 				String tooManyString = "Too many users selected. Please, deselect at least " + tooMany + " invitations.";
 			
-				//session.setAttribute("attemptsErrorMsg", tooManyString);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write(tooManyString);
 				
@@ -147,17 +142,13 @@ public class CheckInvitations extends HttpServlet {
 						invitationDAO.inviteUser(meetingID, u);
 					}
 					connection.commit();
-					connection.setAutoCommit(true);
-					
-					//path = getServletContext().getContextPath() + "/Home";
-					
+					connection.setAutoCommit(true);					
 				}
 				session.removeAttribute("retry");
 				session.removeAttribute("invitedUsersID");
 				session.removeAttribute("attemptsErrorMsg");
 				
 				response.setStatus(HttpServletResponse.SC_OK);
-				//response.sendRedirect(path);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				try {

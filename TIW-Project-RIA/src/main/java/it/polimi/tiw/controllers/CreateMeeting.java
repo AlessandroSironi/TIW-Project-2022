@@ -76,10 +76,7 @@ public class CreateMeeting extends HttpServlet {
 				if (title == null || title.isEmpty() || duration <= 0 || capacity <= 0) {
 					throw new Exception ("Error: missing values or bad input");
 				}
-				else {
-					//path = getServletContext().getContextPath() + "/Registry?title=" + title + "&date=" + dateString + "&duration=" + duration + "&capacity=" + capacity;
-					//path = getServletContext().getContextPath() + "/Registry";
-					
+				else {				
 					Meeting meetingToCreate = new Meeting();
 					meetingToCreate.setTitle(title);
 					meetingToCreate.setStartDate(new Timestamp(date.getTime()));
@@ -106,7 +103,6 @@ public class CreateMeeting extends HttpServlet {
 	}
 	
 	private Date getMeToday() {
-		//return new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); //Yesterday
 		return new Date(System.currentTimeMillis());
 	}
 	

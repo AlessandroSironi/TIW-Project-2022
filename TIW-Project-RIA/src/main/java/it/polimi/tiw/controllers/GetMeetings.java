@@ -75,7 +75,8 @@ public class GetMeetings extends HttpServlet {
 			return;
 		}
 		
-		Gson gson = new GsonBuilder().create(); //TODO: Date format? Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd").create();
+		// Write json on the response
+		Gson gson = new GsonBuilder().create();
 		String jsonMeetingsCreated = gson.toJson(meetingsCreated);
 		String jsonMeetingsInvited = gson.toJson(meetingsInvited);
 		
@@ -86,22 +87,10 @@ public class GetMeetings extends HttpServlet {
 		
 		response.getWriter().write(bothJson);
 		
-		// Write json on the response
-		
-		
 		//Remove attributes relating to failed meeting creations, if user goes back to home page at any point
 		session.removeAttribute("retry");
 		session.removeAttribute("invitedUsersID");
-//		session.removeAttribute("attemptsErrorMsg");
 		session.removeAttribute("meetingToCreate");
-
-		// Redirect to the Home page and add missions to the parameters
-//		String path = "/WEB-INF/home.html";
-//		ServletContext servletContext = getServletContext();
-//		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//		ctx.setVariable("meetingsCreated", meetingsCreated);
-//		ctx.setVariable("meetingsInvited", meetingsInvited);
-//		templateEngine.process(path, ctx, response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
