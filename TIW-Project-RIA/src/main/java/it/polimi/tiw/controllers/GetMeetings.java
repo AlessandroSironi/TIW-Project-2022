@@ -90,10 +90,10 @@ public class GetMeetings extends HttpServlet {
 		
 		
 		//Remove attributes relating to failed meeting creations, if user goes back to home page at any point
-//		session.removeAttribute("retry");
-//		session.removeAttribute("invitedUsersID");
+		session.removeAttribute("retry");
+		session.removeAttribute("invitedUsersID");
 //		session.removeAttribute("attemptsErrorMsg");
-//		session.removeAttribute("meetingToCreate");
+		session.removeAttribute("meetingToCreate");
 
 		// Redirect to the Home page and add missions to the parameters
 //		String path = "/WEB-INF/home.html";

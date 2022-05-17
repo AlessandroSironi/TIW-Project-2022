@@ -51,7 +51,6 @@
             this.update = function (userList) {
                 var row, checkBoxCell, nameCell, surnameCell, mailCell;
 
-                //this.list.innerHtml = ""; //Empty content
                 this.reset();
 
                 var self = this;
@@ -174,10 +173,8 @@
         document.getElementById("modalAlertMsg").style.display = "block";
     }
 
-    //document.getElementById("inviteModalBtn").addEventListener ("click", (e) => {
+
     $('#inviteModalBtn').on("click", function () {
-        
-    //});
         var form = document.getElementById("invitationForm");
         var selectedUsersNumber = getSelectedUsersNumber();
 
@@ -195,9 +192,9 @@
                         if (req.status == 200) {
                             $("#invitationModal").modal("hide");
                             showSuccessCreationMeeting("The meeting has been created.");
-                            refreshMeetings();
                             resetMeetingInfo();
                             resetModalContent();
+                            refreshMeetings();
                         } else {
                             showModalError(msg);
                         }
@@ -210,16 +207,15 @@
         } 
         if (getInvitationAttempts() >= 3) {
             showErrorCreationMeeting("Error: too many attempts to create a meeting with too many users.");
+            $("#invitationModal").modal("hide");
             resetMeetingInfo();
             resetModalContent();
-            $("#invitationModal").modal("hide");
-            //refreshMeetings();
+            refreshMeetings();
             return;
         }
     });
 
     function refreshMeetings() {
-        //TODO: refresh meetingTables, close modal.
         var meetingsCreated = new MeetingsCreated (
             document.getElementById("meetingsCreatedTable"),
             document.getElementById("meetingsCreatedBody")
@@ -251,7 +247,6 @@
     }
 
     document.getElementById("closeModalBtn").addEventListener("click", (e) => {
-        //delete meeting from sessionStorage and session tomcat servlet (?).
         $("#invitationModal").modal("hide");
         resetMeetingInfo();
         resetModalContent();
