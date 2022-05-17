@@ -2,7 +2,7 @@
  *  Home management
  */
 
-( function() {
+//( function() {
 
     window.addEventListener("load", (e) => {
         if (sessionStorage.getItem("user") == null) {
@@ -36,6 +36,10 @@
         this.meetingsCreatedTable = _meetingsCreatedTable;
         this.meetingsCreatedBody = _meetingsCreatedBody;
 
+        this.reset = function () {
+            document.getElementById("meetingsCreatedBody").innerHTML = "";
+        }
+
         this.show = function() {
             var self = this;
 
@@ -60,8 +64,8 @@
         };
 
         this.update = function (meetingsCreatedArray) {
-            var elem, i, row, title, date, duration, capacity; //TODO ?
-            this.meetingsCreatedBody.innerHTML = ""; //Empty all data present.
+            var elem, i, row, titleCell, dateCell, durationCell, capacityCell; //TODO ?
+            this.reset();
 
             var self = this;
             meetingsCreatedArray.forEach(function (meetingCreated) { //Self is visible here, not this.
@@ -98,6 +102,10 @@
         this.meetingsInvitedTable = _meetingsInvitedTable;
         this.meetingsInvitedBody = _meetingsInvitedBody;
 
+        this.reset = function () {
+            document.getElementById("meetingsInvitedBody").innerHTML = "";
+        }
+
         this.show = function() {
             var self = this;
 
@@ -123,7 +131,7 @@
 
         this.update = function (meetingsInvitedArray) {
             var elem, i, row, titleCell, dateCell, durationCell, capacityCell, invitedByCell;
-            this.meetingsInvitedBody.innerHTML = ""; //Empty all data present.
+            this.reset();
 
             var self = this;
             meetingsInvitedArray.forEach(function (meetingInvited) { //Self is visible here, not this.
@@ -171,4 +179,4 @@
         }
     }
 
-})();
+//})();

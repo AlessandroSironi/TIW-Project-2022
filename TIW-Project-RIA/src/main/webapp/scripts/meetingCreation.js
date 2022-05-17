@@ -25,8 +25,7 @@
         this.list = _list;
 
         this.reset = function() {
-            this.list.style.visibility = "hidden";
-            this.list.innerHtml = "";
+            resetModalContent();
         };
 
         this.show = function() {
@@ -49,15 +48,15 @@
                 }
             });
 
-            this.update = function (invitationList) {
+            this.update = function (userList) {
                 var row, checkBoxCell, nameCell, surnameCell, mailCell;
 
-                this.list.innerHtml = ""; //Empty content
+                //this.list.innerHtml = ""; //Empty content
                 this.reset();
 
                 var self = this;
 
-                invitationList.forEach(function (user) {
+                userList.forEach(function (user) {
                     row = document.createElement("tr");
                     
                     checkBoxCell = document.createElement("input");
@@ -140,7 +139,6 @@
             document.getElementById("invitationsTableBody")
         );
 
-        invitationList.list.innerHtml = "";
         invitationList.reset();
         invitationList.show();
         document.getElementById("modalAlertMsg").style.display = "none";
@@ -195,6 +193,7 @@
                     if (req.readyState == XMLHttpRequest.DONE) {
                         var msg = req.responseText;
                         if (req.status == 200) {
+                            $("#invitationModal").modal("hide");
                             showSuccessCreationMeeting("The meeting has been created.");
                             refreshMeetings();
                             resetMeetingInfo();
