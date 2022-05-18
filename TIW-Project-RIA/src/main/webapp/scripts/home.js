@@ -159,8 +159,8 @@ function MeetingsInvited (_meetingsInvitedTable, _meetingsInvitedBody) {
 }
 
 function parseDate (timestamp) {
-    let tempDate = new Date (Date.parse(timestamp));
-    let stringDate = parseDateAddZero(tempDate.getDay()) + "-" + parseDateAddZero(tempDate.getMonth()) + "-" + tempDate.getFullYear()
+    let tempDate = new Date (timestamp);
+    let stringDate = parseDateAddZero(tempDate.getDay()) + "-" + parseDateAddZero(tempDate.getMonth() + 1) + "-" + tempDate.getFullYear()
         + " " + parseDateAddZero(tempDate.getUTCHours()) + ":" + parseDateAddZero(tempDate.getMinutes()) + ":" + parseDateAddZero(tempDate.getSeconds());
     return stringDate;
 }
