@@ -18,10 +18,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
-import it.polimi.tiw.dao.InvitationDAO;
-import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
