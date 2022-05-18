@@ -3,20 +3,14 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -29,25 +23,14 @@ import java.util.regex.Pattern;
 @MultipartConfig
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private TemplateEngine templateEngine;
 	private Connection connection = null;
 	
 	@Override
 	public void init() throws ServletException {
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(getServletContext());
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
         connection = ConnectionHandler.getConnection(getServletContext());
 	}
 	
-	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		final WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
-		
-		String path = null;
-		
+	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		String user = null;
 		String password = null;
 		String passwordRepeat = null;

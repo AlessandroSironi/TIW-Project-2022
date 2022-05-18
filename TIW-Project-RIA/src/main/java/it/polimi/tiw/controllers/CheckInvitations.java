@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.beans.Meeting;
 import it.polimi.tiw.beans.User;
@@ -30,7 +24,6 @@ import it.polimi.tiw.utils.ConnectionHandler;
 @MultipartConfig
 public class CheckInvitations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private TemplateEngine templateEngine;
 	private Connection connection = null;
 
 	public CheckInvitations() {
@@ -38,19 +31,11 @@ public class CheckInvitations extends HttpServlet {
 	}
 
 	public void init() throws ServletException {
-		ServletContext servletContext = getServletContext();
-		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		this.templateEngine = new TemplateEngine();
-		this.templateEngine.setTemplateResolver(templateResolver);
-		templateResolver.setSuffix(".html");
 		connection = ConnectionHandler.getConnection(getServletContext());
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
-		String path = null;
 		
 		User userOwner = (User) session.getAttribute("user");
 		int userOwnerID = userOwner.getID();
@@ -130,9 +115,8 @@ public class CheckInvitations extends HttpServlet {
 		} else { //# of people invited is ok!
 			try {
 				if (meetingDAO.getMeetingID(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity()) != -1) {
-					path = getServletContext().getContextPath() + "/Home"; 
-					webContext.setVariable("attemptsErrorMsg", "Meeting already exists.");
-					templateEngine.process(path,  webContext, response.getWriter());
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.getWriter().write("Meeting already exists.");
 				} else {
 					connection.setAutoCommit(false);
 					meetingDAO.createMeeting(userOwnerID, meetingToCreate.getTitle(), meetingToCreate.getStartDate(), meetingToCreate.getDuration(), meetingToCreate.getCapacity());
