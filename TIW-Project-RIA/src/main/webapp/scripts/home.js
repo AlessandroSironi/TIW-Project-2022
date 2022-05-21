@@ -161,7 +161,7 @@ function MeetingsInvited (_meetingsInvitedTable, _meetingsInvitedBody) {
 function parseDate (timestamp) {
     let tempDate = new Date (timestamp);
     let stringDate = parseDateAddZero(tempDate.getDate()) + "-" + parseDateAddZero(parseInt(tempDate.getMonth()) + 1) + "-" + tempDate.getFullYear()
-        + " " + parseDateAddZero(tempDate.getUTCHours()) + ":" + parseDateAddZero(tempDate.getMinutes());
+        + " " + parseDateAddZero(tempDate.getHours()) + ":" + parseDateAddZero(tempDate.getMinutes());
     return stringDate;
 }
 
