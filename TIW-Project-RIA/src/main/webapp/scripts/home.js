@@ -160,13 +160,14 @@ function MeetingsInvited (_meetingsInvitedTable, _meetingsInvitedBody) {
 
 function parseDate (timestamp) {
     let tempDate = new Date (timestamp);
-    let stringDate = parseDateAddZero(tempDate.getDay()) + "-" + parseDateAddZero(tempDate.getMonth() + 1) + "-" + tempDate.getFullYear()
-        + " " + parseDateAddZero(tempDate.getUTCHours()) + ":" + parseDateAddZero(tempDate.getMinutes()) + ":" + parseDateAddZero(tempDate.getSeconds());
+    let stringDate = parseDateAddZero(tempDate.getDate()) + "-" + parseDateAddZero(parseInt(tempDate.getMonth()) + 1) + "-" + tempDate.getFullYear()
+        + " " + parseDateAddZero(tempDate.getUTCHours()) + ":" + parseDateAddZero(tempDate.getMinutes());
     return stringDate;
 }
 
 function parseDateAddZero (value) {
-    if (value < 10) {
+	let tempValue = parseInt(value);
+    if (tempValue < 10) {
         return "0" + value;
     } else {
         return value;
