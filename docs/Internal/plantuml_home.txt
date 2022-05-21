@@ -1,0 +1,54 @@
+@startuml
+Group @Load
+"home.html + home.js" -> GetMeetings: AJAX Get
+GetMeetings -> "home.html + home.js": Response (JSON[]: meetingsCreated, 
+meetingsInvited) 
+"home.html + home.js" -> "home.html + home.js": MeetingsCreated.update(), 
+MeetingsInvited.update()
+"home.html + home.js" --> "home.html + home.js": showError()
+end
+Group New Meeting (event: submit)
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+checkMeetingInfo()
+"home.html + meetingCreation.js" -> CreateMeeting: AJAX Post (Meeting 
+Info)
+CreateMeeting -> "home.html + meetingCreation.js": Response
+"home.html + meetingCreation.js" --> "home.html + meetingCreation.js": 
+showError()
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+showModal()
+"home.html + meetingCreation.js" -> GetRegistry: AJAX Get
+GetRegistry -> "home.html + meetingCreation.js": response (JSON, Users)
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+InvitationList.update()
+Group Submit (Modal)
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+Check Number of Invites
+"home.html + meetingCreation.js" -> CheckInvitations: AJAX Post
+Group Too Many Invites
+Group Attempts Left
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+showError()\nwith number of invitations to deselect
+"home.html + meetingCreation.js" -> SessionStorage: Attempts++
+"home.html + meetingCreation.js" -> IncrementAttempts: AJAX Get
+end
+Group No Attempts Left
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+showError()
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+refreshMeetings()
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+closeModal()
+end
+end
+Group Invitations OK
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+showConfirmationMsg()
+"home.html + meetingCreation.js" -> SessionStorage: Clean and Reset 
+Attempts
+"home.html + meetingCreation.js" -> "home.html + meetingCreation.js": 
+refreshMeetings()
+end
+end
+end
+@enduml
