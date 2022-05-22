@@ -85,7 +85,7 @@ public class CreateMeeting extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error: missing values or bad input.");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			e.printStackTrace();
 			return;
 		}
