@@ -41,7 +41,6 @@
                             return;
                         }
                         self.update(users); //Visible by closure.
-                        sessionStorage.setItem("avaiableUsers", req.responseText);
                     } else {
                         showErrorAlert("Internal Error");
                     }
