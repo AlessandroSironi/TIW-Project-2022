@@ -87,11 +87,11 @@ CREATE TABLE IF NOT EXISTS `Meeting` (
 --
 
 INSERT INTO `Meeting` (`ID`, `ID_Creator`, `title`, `startDate`, `duration`, `capacity`) VALUES
-(1, 1, 'Presentazione Progetto TIW', '2022-05-25 16:30:00', 60, 3),
-(2, 1, 'Sviluppo Progetto TIW', '2022-05-24 09:30:00', 75, 2),
-(3, 1, 'TIW - Lezione', '2022-05-26 11:15:00', 90, 300),
-(4, 2, 'Progetto Ing. SW', '2022-05-27 15:30:00', 120, 2),
-(5, 2, 'Progetto Ing. Inf', '2022-05-27 14:30:00', 120, 5);
+(1, 1, 'Presentazione Progetto TIW', '2022-05-25 14:30:00', 60, 3),
+(2, 1, 'Sviluppo Progetto TIW', '2022-05-24 07:30:00', 75, 2),
+(3, 1, 'TIW - Lezione', '2022-05-26 09:15:00', 90, 300),
+(4, 2, 'Progetto Ing. SW', '2022-05-27 13:30:00', 120, 2),
+(5, 2, 'Progetto Ing. Inf', '2022-05-27 12:30:00', 120, 5);
 
 -- --------------------------------------------------------
 
