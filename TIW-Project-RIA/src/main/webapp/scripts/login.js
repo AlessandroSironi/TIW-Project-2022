@@ -22,9 +22,6 @@ function showSignUpAlert(msg) {
     document.getElementById("signUpErrorMsg").textContent = msg;
 }
 
-//document.getElementById("pswSignUp").onchange = pswErrorSignUp;
-//document.getElementById("psw2SignUp").onchange = pswErrorSignUp;
-
 //Returns true if checks are OK
 function pswErrorSignUp() {
     let psw1 = document.getElementById("pswSignUp").value;
